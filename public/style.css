@@ -14,6 +14,24 @@
   margin: 0;
   padding: 0;
 }
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+  float: left;
+}
+.bubble {
+  display: inline-block;
+  max-width: 90%;
+}
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.3em;
+}
 
 body {
   font-family:
