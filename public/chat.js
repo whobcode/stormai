@@ -100,7 +100,7 @@ if (localStorage.getItem("chatHistory")) {
   chatHistory = [
     {
       role: "assistant",
-      content: "Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?",
+      content: "Hello! I'm an LLM chat app powered by theWannaBeeesz. How can I help you today?",
       timestamp: Date.now()
     }
   ];
@@ -126,13 +126,44 @@ userInput.addEventListener("input", function () {
     document.getElementById("cat-moon-svg").classList.remove("glow");
   }, 1400);
 });
+userInput.addEventListener("input", function () {
+  this.style.height = "auto";
+  this.style.height = this.scrollHeight + "px";
+  this.classList.add("typing-glow");
+  chatContainer.classList.add("typing");
+  // Always black text in light theme when typing
+  if (document.body.classList.contains("light-theme")) {
+    this.style.color = "#151411";
+  } else {
+    this.style.color = "#151411";
+  }
+  document.getElementById("cat-moon-svg").classList.add("glow");
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    this.classList.remove("typing-glow");
+    chatContainer.classList.remove("typing");
+    // Light theme: always black
+    if (document.body.classList.contains("light-theme")) {
+      this.style.color = "#151411";
+    } else {
+      // Dark theme: white when not typing
+      this.style.color = "#fafcff";
+    }
+    document.getElementById("cat-moon-svg").classList.remove("glow");
+  }, 1400);
+});
+
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
-  if (!document.body.classList.contains("light-theme"))
+  if (document.body.classList.contains("light-theme")) {
+    this.style.color = "#151411";
+  } else {
     this.style.color = "#fafcff";
+  }
   document.getElementById("cat-moon-svg").classList.remove("glow");
 });
+
 userInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
