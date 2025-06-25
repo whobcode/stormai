@@ -34,7 +34,29 @@
     <input id="avatar-upload" type="file" accept="image/*" style="display:none;">
   </header>
 
-  <div class="chat-container">
+  <div class="chat-container" id="chat-container">
+    <!-- Cat & Moon SVG Background -->
+    <div id="bg-moon">
+      <svg viewBox="0 0 240 180" id="cat-moon-svg" style="width:90%;max-width:350px;position:absolute;left:50%;bottom:3%;transform:translateX(-50%);opacity:0.17;pointer-events:none;z-index:1;">
+        <defs>
+          <radialGradient id="moonGlow" cx="50%" cy="45%" r="60%">
+            <stop offset="0%" stop-color="#fffbe2" stop-opacity="1" />
+            <stop offset="80%" stop-color="#ffedb2" stop-opacity="0.7" />
+            <stop offset="100%" stop-color="#ffd580" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <!-- Moon -->
+        <circle id="moon" cx="120" cy="75" r="55" fill="url(#moonGlow)" stroke="#ffd580" stroke-width="3" />
+        <!-- Cat silhouette -->
+        <g id="cat" fill="none" stroke="#23221e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path id="catBody" d="M130 125 Q124 145 110 135 Q104 125 110 120 Q123 120 130 125 Z" />
+          <circle id="catHead" cx="120" cy="115" r="12" fill="#23221e" />
+          <path id="catTail" d="M128 132 Q145 148 132 156" />
+          <path id="catEar1" d="M128 106 Q130 98 125 108" />
+          <path id="catEar2" d="M112 108 Q110 98 116 106" />
+        </g>
+      </svg>
+    </div>
     <div id="chat-messages" class="chat-messages"></div>
     <div class="typing-indicator" id="typing-indicator">
       <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
@@ -74,6 +96,10 @@
         <li><code>/export md</code> – download as markdown</li>
         <li><code>/help</code> – list commands</li>
       </ul>
+      <h4>API Endpoints</h4>
+      <ul>
+        <li><code>/api/chat</code>: POST — LLM chat API (requires login if protected)</li>
+      </ul>
       <button onclick="closeInfo()" style="margin-top:1rem;">Close</button>
     </div>
   </div>
@@ -89,9 +115,14 @@
         <b>Model Selection</b> (OpenRouter.ai):<br>
         <select id="model-select">
           <option value="default">Default (coming soon)</option>
-          <!-- More options coming soon -->
         </select>
       </div>
+      <div style="margin-top:1.2em;">
+        <button id="export-settings-btn">Export All Data</button>
+        <button id="import-settings-btn">Import Data</button>
+        <button id="clear-settings-btn" style="color:#c00;margin-left:1em;">Clear All Data</button>
+      </div>
+      <input id="import-settings-file" type="file" accept="application/json" style="display:none;">
       <button onclick="closeSettings()" style="margin-top:1rem;">Close</button>
     </div>
   </div>

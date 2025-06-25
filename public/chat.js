@@ -1,8 +1,8 @@
-// LLM Chat App with Modern UI, Hamburger Menu, Avatar Upload, and History Modal (+ Settings, Info, Search, Verbose Indicator)
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 const avatarInput = document.getElementById("avatar-upload");
+const chatContainer = document.getElementById("chat-container");
 
 // Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
@@ -42,6 +42,49 @@ document.getElementById("model-select").onchange = function(e){
   localStorage.setItem("selectedModel", e.target.value);
 };
 
+// Export/import/clear data logic
+document.getElementById('export-settings-btn').onclick = function() {
+  const data = {
+    chatHistory: JSON.parse(localStorage.getItem('chatHistory') || '[]'),
+    userAvatar: localStorage.getItem('userAvatar') || null,
+    theme: localStorage.getItem('theme') || null,
+    verboseTyping: localStorage.getItem('verboseTyping') || null,
+    selectedModel: localStorage.getItem('selectedModel') || null
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'hwmnbai-data.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+const importFile = document.getElementById('import-settings-file');
+document.getElementById('import-settings-btn').onclick = ()=>importFile.click();
+importFile.onchange = function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try {
+      const data = JSON.parse(evt.target.result);
+      if(data.chatHistory) localStorage.setItem('chatHistory', JSON.stringify(data.chatHistory));
+      if(data.userAvatar) localStorage.setItem('userAvatar', data.userAvatar);
+      if(data.theme) localStorage.setItem('theme', data.theme);
+      if(data.verboseTyping) localStorage.setItem('verboseTyping', data.verboseTyping);
+      if(data.selectedModel) localStorage.setItem('selectedModel', data.selectedModel);
+      alert("Imported! Reloading…");
+      window.location.reload();
+    } catch(e){ alert("Import failed!"); }
+  };
+  reader.readAsText(file);
+};
+document.getElementById('clear-settings-btn').onclick = function(){
+  if(confirm("Are you sure? This deletes ALL chat, settings, and avatar.")){
+    localStorage.clear();
+    window.location.reload();
+  }
+};
+
 const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
 const AVATAR_AI = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Robot_icon.svg";
 const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
@@ -64,19 +107,31 @@ if (localStorage.getItem("chatHistory")) {
   renderMessage("assistant", chatHistory[0].content, chatHistory[0].timestamp);
 }
 
-// Input glow
+// Input/Container glow + SVG color shift
 let typingTimeout;
 userInput.addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = this.scrollHeight + "px";
   this.classList.add("typing-glow");
+  chatContainer.classList.add("typing");
+  if (!document.body.classList.contains("light-theme"))
+    this.style.color = "#151411";
+  document.getElementById("cat-moon-svg").classList.add("glow");
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(() => {
     this.classList.remove("typing-glow");
+    chatContainer.classList.remove("typing");
+    if (!document.body.classList.contains("light-theme"))
+      this.style.color = "#fafcff";
+    document.getElementById("cat-moon-svg").classList.remove("glow");
   }, 1400);
 });
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
+  chatContainer.classList.remove("typing");
+  if (!document.body.classList.contains("light-theme"))
+    this.style.color = "#fafcff";
+  document.getElementById("cat-moon-svg").classList.remove("glow");
 });
 userInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
