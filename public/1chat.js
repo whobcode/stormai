@@ -1,5 +1,18 @@
 /**
- * LLM Chat App Frontend (Pro Upgrade + Avatar Upload)
+ * LLM Chat App Frontend (Pro Upgrade)
+ *
+ * Features:
+ * - Avatars
+ * - Timestamps
+ * - Persistent history
+ * - Markdown/code rendering
+ * - Sound on new message
+ * - Export chat (txt/md)
+ * - Slash commands (/clear, /export)
+ * - Streaming response effect
+ * - Theme toggle (dark/light)
+ * - Animated typing
+ * - Quick replies
  */
 
 // ========== DOM elements ==========
@@ -7,19 +20,28 @@ const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 const typingIndicator = document.getElementById("typing-indicator");
-const themeBtn = document.getElementById("theme-toggle");
-const avatarInput = document.getElementById("avatar-upload");
+const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4"
 
-// ========== Avatar Asset ==========
-const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
-const AVATAR_AI = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Robot_icon.svg";
-const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
+// Theme toggle button (add to HTML if you want)
+let themeBtn = document.getElementById("theme-toggle");
+if (!themeBtn) {
+  themeBtn = document.createElement("button");
+  themeBtn.id = "theme-toggle";
+  themeBtn.textContent = "Toggle Theme";
+  themeBtn.style = "position:fixed;top:12px;right:12px;z-index:10;";
+  document.body.appendChild(themeBtn);
+}
+
+// ========== Assets ==========
+const AVATAR_USER = "https://avatars.githubusercontent.com/u/583231?v=4"; // change to your own
+const AVATAR_AI = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Robot_icon.svg"; // or local asset
+const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3"; // simple pop
 
 // ========== State ==========
 let chatHistory = [];
 let isProcessing = false;
 
-// Load persistent chat
+// Try to load persistent chat
 if (localStorage.getItem("chatHistory")) {
   chatHistory = JSON.parse(localStorage.getItem("chatHistory"));
   chatHistory.forEach(m => renderMessage(m.role, m.content, m.timestamp));
@@ -29,7 +51,7 @@ if (localStorage.getItem("chatHistory")) {
     {
       role: "assistant",
       content:
-        "Hello! I'm an LLM chat app powered by theWannaBeeesz  Ai. How can I help you today?",
+        "Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?",
       timestamp: Date.now()
     },
   ];
@@ -41,6 +63,7 @@ userInput.addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = this.scrollHeight + "px";
 });
+
 userInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
@@ -49,20 +72,6 @@ userInput.addEventListener("keydown", function (e) {
 });
 sendButton.addEventListener("click", sendMessage);
 themeBtn.addEventListener("click", toggleTheme);
-
-if (avatarInput) {
-  avatarInput.addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        localStorage.setItem("userAvatar", evt.target.result);
-        window.location.reload();
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-}
 
 // ========== Theme Toggle ==========
 function toggleTheme() {
@@ -81,7 +90,9 @@ async function sendMessage() {
     userInput.value = "";
     return;
   }
+  // Add to UI/state
   addMessageToChat("user", message);
+  // Clear input
   userInput.value = "";
   userInput.style.height = "auto";
   isProcessing = true;
@@ -91,8 +102,11 @@ async function sendMessage() {
   chatHistory.push({ role: "user", content: message, timestamp: Date.now() });
   saveHistory();
   try {
+    // Create streaming response element
     const assistantMessageEl = renderMessage("assistant", "", Date.now());
+    // Scroll
     scrollChatToBottom();
+    // Send request
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -102,6 +116,7 @@ async function sendMessage() {
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let responseText = "";
+    // Streaming (per character)
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -142,10 +157,15 @@ function addMessageToChat(role, content) {
   scrollChatToBottom();
 }
 
+// ========== Render message ==========
 function renderMessage(role, content, timestamp) {
+  // Avatars
   const avatar = role === "user" ? AVATAR_USER : AVATAR_AI;
+  // Markdown
   const html = renderMarkdown(content);
+  // Timestamp
   const time = timestamp ? formatTime(timestamp) : "";
+  // Build element
   const msgDiv = document.createElement("div");
   msgDiv.className = `message ${role}-message`;
   msgDiv.innerHTML = `
@@ -160,6 +180,7 @@ function renderMessage(role, content, timestamp) {
   return msgDiv.querySelector(".content"); // for streaming effect
 }
 
+// ========== Streaming per char ==========
 async function streamToMessage(el, text) {
   for (let i = 0; i < text.length; ++i) {
     el.innerHTML += text[i];
@@ -167,32 +188,44 @@ async function streamToMessage(el, text) {
   }
 }
 
+// ========== Markdown rendering ==========
 function renderMarkdown(md) {
+  // Lightweight Markdown (bold, italic, code, link, code block)
   let html = md
-    .replace(/\`([^\`]+)\\`/g, '<code>$1</code>')
+    .replace(/\`([^\\\`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\*([^*]+)\*/g, '<i>$1</i>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+  // Code blocks
   html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
   return html;
 }
 
+// ========== Save/load history ==========
 function saveHistory() {
   localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 }
+
+// ========== Scroll ==========
 function scrollChatToBottom() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+// ========== Time formatting ==========
 function formatTime(ts) {
   const date = new Date(ts);
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
+
+// ========== Sound notification ==========
 let audio = null;
 function playSound() {
   if (!audio) audio = new Audio(SOUND_URL);
   audio.currentTime = 0;
   audio.play();
 }
+
+// ========== Export chat ==========
 function exportChat(format = "txt") {
   let out = "";
   if (format === "md") {
@@ -212,6 +245,8 @@ function exportChat(format = "txt") {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
+
+// ========== Slash commands ==========
 function handleSlashCommand(cmd) {
   if (cmd.startsWith("/clear")) {
     chatHistory = [];
@@ -227,7 +262,10 @@ function handleSlashCommand(cmd) {
     renderMessage("assistant", "Unknown command.", Date.now());
   }
 }
+
+// ========== Quick replies ==========
 function renderQuickReplies(aiText) {
+  // Simple demo: show suggestions after AI replies
   const lastUser = chatHistory.slice().reverse().find(m => m.role === "user");
   if (!lastUser) return;
   const sampleReplies = [
@@ -236,6 +274,7 @@ function renderQuickReplies(aiText) {
     "Summarize that.",
     "/help"
   ];
+  // Remove any old quick reply bar
   let oldBar = document.getElementById("quick-replies");
   if (oldBar) oldBar.remove();
   const bar = document.createElement("div");
@@ -254,4 +293,15 @@ function renderQuickReplies(aiText) {
   chatMessages.appendChild(bar);
   scrollChatToBottom();
 }
-
+const avatarInput = document.getElementById("avatar-upload");
+avatarInput.addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (file && file.type.startsWith("image/")) {
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      localStorage.setItem("userAvatar", evt.target.result);
+      window.location.reload(); // reload to use new avatar in all future user messages
+    };
+    reader.readAsDataURL(file);
+  }
+});

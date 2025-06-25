@@ -1,47 +1,40 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HWMNB A.i.</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <header>
-      <h1> AI Chat</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HWMNB A.i.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header style="display: flex; align-items: center; justify-content: space-between;">
+    <div>
+      <h1>HWMNB A.i.</h1>
       <p>Powered by a Mad Scientist</p>
-    </header>
-
-    <div class="chat-container">
-      <div id="chat-messages" class="chat-messages">
-        <div class="message assistant-message">
-          <p>
-            Hello! I'm an LLM chat app created by TheWannaBeesz. How can
-            I help you today?
-          </p>
-        </div>
+      <div style="margin-bottom:0.8rem">
+        <label for="avatar-upload" style="cursor:pointer;color:var(--primary-accent);font-size:1rem;">Change Avatar</label>
+        <input id="avatar-upload" type="file" accept="image/*" style="display:none;">
+        <a href="https://whobcflare.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">Login</a>
       </div>
-
-      <div class="typing-indicator" id="typing-indicator">
-        AI is thinking...
-      </div>
-
-      <div class="message-input">
-        <textarea
-          id="user-input"
-          placeholder="Type your message here..."
-          rows="1"
-          autofocus
-        ></textarea>
-        <button id="send-button">Send</button>
+      <div id="slash-help" style="color:var(--text-light);font-size:1rem;margin-top:0.3rem;">
+        <b>Slash Commands:</b> <span style="opacity:.9">/clear, /export, /export md, /help</span>
       </div>
     </div>
+    <button id="theme-toggle" style="margin-left:1rem">Toggle Theme</button>
+  </header>
 
-    <footer>
-      <p>Thw WannaBeeesz &copy; 2025</p>
-    </footer>
-
-    <!-- Chat app script -->
-    <script src="chat.js"></script>
-  </body>
+  <div class="chat-container">
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="typing-indicator" id="typing-indicator">AI is thinking...</div>
+    <div class="message-input">
+      <textarea id="user-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+  <footer>
+    <p>theWannaBeeesz &copy; 2025</p>
+  </footer>
+  <script src="chat.js"></script>
+</body>
 </html>
+
