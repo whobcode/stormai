@@ -1,12 +1,10 @@
-// LLM Chat App with Modern UI, Hamburger Menu, Avatar Upload, and History Modal
-
+// LLM Chat App with Modern UI, Hamburger Menu, Avatar Upload, and History Modal (+ Settings, Info, Search, Verbose Indicator)
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
-const typingIndicator = document.getElementById("typing-indicator");
 const avatarInput = document.getElementById("avatar-upload");
 
-// Hamburger menu logic
+// Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
 menuToggle.addEventListener("click", () => {
@@ -21,6 +19,28 @@ document.body.addEventListener("click", (e) => {
 document.getElementById("theme-switch").onclick = toggleTheme;
 document.getElementById("export-chat").onclick = () => exportChat("txt");
 document.getElementById("change-avatar").onclick = () => avatarInput.click();
+document.getElementById("info-btn").onclick = function() {
+  document.getElementById("info-modal").classList.remove("hidden");
+};
+function closeInfo() { document.getElementById("info-modal").classList.add("hidden"); }
+document.getElementById("settings-btn").onclick = function() {
+  document.getElementById("settings-modal").classList.remove("hidden");
+};
+function closeSettings() { document.getElementById("settings-modal").classList.add("hidden"); }
+
+// Verbose typing indicator toggle
+const verboseToggle = document.getElementById("verbose-toggle");
+let isVerbose = localStorage.getItem("verboseTyping") !== "false";
+verboseToggle.checked = isVerbose;
+verboseToggle.onchange = function() {
+  isVerbose = verboseToggle.checked;
+  localStorage.setItem("verboseTyping", isVerbose ? "true" : "false");
+};
+
+// Model selector placeholder (save to localStorage for future use)
+document.getElementById("model-select").onchange = function(e){
+  localStorage.setItem("selectedModel", e.target.value);
+};
 
 const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
 const AVATAR_AI = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Robot_icon.svg";
@@ -29,6 +49,7 @@ const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3
 let chatHistory = [];
 let isProcessing = false;
 
+// Persistent chat
 if (localStorage.getItem("chatHistory")) {
   chatHistory = JSON.parse(localStorage.getItem("chatHistory"));
   chatHistory.forEach(m => renderMessage(m.role, m.content, m.timestamp));
@@ -43,9 +64,19 @@ if (localStorage.getItem("chatHistory")) {
   renderMessage("assistant", chatHistory[0].content, chatHistory[0].timestamp);
 }
 
+// Input glow
+let typingTimeout;
 userInput.addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = this.scrollHeight + "px";
+  this.classList.add("typing-glow");
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    this.classList.remove("typing-glow");
+  }, 1400);
+});
+userInput.addEventListener("blur", function () {
+  this.classList.remove("typing-glow");
 });
 userInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -75,6 +106,20 @@ function toggleTheme() {
 }
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light-theme");
 
+function setTypingIndicator(visible) {
+  const indicator = document.getElementById("typing-indicator");
+  const text = document.getElementById("typing-text");
+  isVerbose = localStorage.getItem("verboseTyping") !== "false";
+  if (visible) {
+    indicator.classList.add("visible");
+    text.innerHTML = isVerbose
+      ? " The AI is analyzing your question, researching the answer, and will respond shortly."
+      : "";
+  } else {
+    indicator.classList.remove("visible");
+  }
+}
+
 async function sendMessage() {
   const message = userInput.value.trim();
   if (message === "" || isProcessing) return;
@@ -89,7 +134,7 @@ async function sendMessage() {
   isProcessing = true;
   userInput.disabled = true;
   sendButton.disabled = true;
-  typingIndicator.classList.add("visible");
+  setTypingIndicator(true);
   chatHistory.push({ role: "user", content: message, timestamp: Date.now() });
   saveHistory();
   try {
@@ -128,7 +173,7 @@ async function sendMessage() {
     console.error("Error:", error);
     addMessageToChat("assistant", "Sorry, there was an error processing your request.");
   } finally {
-    typingIndicator.classList.remove("visible");
+    setTypingIndicator(false);
     isProcessing = false;
     userInput.disabled = false;
     sendButton.disabled = false;
@@ -168,7 +213,7 @@ async function streamToMessage(el, text) {
 }
 function renderMarkdown(md) {
   let html = md
-    .replace(/\\`([^\`]+)\\`/g, '<code>$1</code>')
+    .replace(/\`([^\`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\*([^*]+)\*/g, '<i>$1</i>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
@@ -253,20 +298,58 @@ function renderQuickReplies(aiText) {
   scrollChatToBottom();
 }
 
-// Chat History Modal
+// Chat History Modal: Indexed, Searchable, Interactive
+document.getElementById("history-btn").onclick = function() {
+  showHistory();
+};
 function closeHistory() {
   document.getElementById("history-modal").classList.remove("show");
 }
-document.getElementById("history-btn").onclick = function() {
+function showHistory() {
   const modal = document.getElementById("history-modal");
   const list = document.getElementById("history-list");
+  const searchInput = document.getElementById("history-search");
   list.innerHTML = "";
   const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
-  history.slice(-10).forEach(m => {
-    const li = document.createElement("li");
-    li.textContent = `[${formatTime(m.timestamp)}] ${m.role}: ${m.content}`;
-    list.appendChild(li);
+  // Simple session splits: messages between '/clear'
+  let sessions = [];
+  let curr = [];
+  history.forEach(msg => {
+    if (msg.content === "Chat cleared. How can I help?") {
+      if (curr.length) sessions.push(curr);
+      curr = [];
+    } else {
+      curr.push(msg);
+    }
   });
+  if (curr.length) sessions.push(curr);
+
+  // Flatten and show by most recent, filter by search if any
+  function renderFilteredHistory() {
+    list.innerHTML = "";
+    let filter = searchInput.value.trim().toLowerCase();
+    let filtered = sessions
+      .flat()
+      .filter(m => !filter || m.content.toLowerCase().includes(filter));
+    if (!filtered.length) {
+      list.innerHTML = '<li style="color:#c00;">No matches.</li>';
+      return;
+    }
+    filtered.forEach((m, i) => {
+      let li = document.createElement("li");
+      li.innerHTML = `<b>${m.role}:</b> ${m.content}<br>
+        <span style="font-size:0.75em; color:var(--text-light);">${formatTime(m.timestamp)}</span>`;
+      li.style.cursor = "pointer";
+      li.onclick = () => {
+        userInput.value = m.content;
+        userInput.focus();
+        closeHistory();
+      };
+      list.appendChild(li);
+    });
+  }
+  searchInput.oninput = renderFilteredHistory;
+  renderFilteredHistory();
   modal.classList.add("show");
 }
 
