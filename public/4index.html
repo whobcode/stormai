@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HWMNB A.i.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Hamburger Menu -->
+  <div id="hamburger-menu">
+    <button id="menu-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="menu-options" class="hidden">
+      <ul>
+        <li><a href="#" id="history-btn"><span class="menu-icon">🕒</span> Chat History</a></li>
+        <li><a href="#" id="change-avatar"><span class="menu-icon">🖼️</span> Change Avatar</a></li>
+        <li><a href="#" id="export-chat"><span class="menu-icon">⬇️</span> Export Chat</a></li>
+        <li><a href="#" id="theme-switch"><span class="menu-icon">🌗</span> Toggle Theme</a></li>
+        <li><a href="#" id="settings-btn"><span class="menu-icon">⚙️</span> Settings</a></li>
+        <li><a href="#" id="info-btn"><span class="menu-icon">ℹ️</span> Info</a></li>
+        <li>
+          <a href="https://whobcflareaccess.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">
+            <span class="menu-icon">🔐</span> Login
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <h1>|HWMNB\a.i.-chat/HWMNB|</h1>
+    <input id="avatar-upload" type="file" accept="image/*" style="display:none;">
+  </header>
+
+  <div class="chat-container">
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="typing-indicator" id="typing-indicator">
+      <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
+      <span id="typing-text"></span>
+    </div>
+    <div class="message-input">
+      <textarea id="user-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; color:var(--text-light); font-size: 0.86rem;">
+      <span>Powered by <b>a few mad scientists</b></span>
+      <span style="font-size:0.75rem;">theWannaBeeesz &copy; 2025</span>
+    </div>
+  </footer>
+
+  <!-- Chat History Modal -->
+  <div id="history-modal" class="hidden">
+    <div class="history-modal-content">
+      <h3>Chat History</h3>
+      <input type="search" id="history-search" placeholder="Search chat..." style="width:97%;padding:0.3em;margin-bottom:0.7em;border-radius:0.7em;border:1px solid #ddd;">
+      <ul id="history-list"></ul>
+      <button onclick="closeHistory()" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="info-modal" class="hidden">
+    <div class="modal-content">
+      <h3>Info</h3>
+      <b>Slash Commands:</b>
+      <ul style="font-size:0.96em;margin-bottom:0.6em;">
+        <li><code>/clear</code> – clear the conversation</li>
+        <li><code>/export</code> – download as text</li>
+        <li><code>/export md</code> – download as markdown</li>
+        <li><code>/help</code> – list commands</li>
+      </ul>
+      <button onclick="closeInfo()" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="hidden">
+    <div class="modal-content">
+      <h3>Settings</h3>
+      <div>
+        <label><input type="checkbox" id="verbose-toggle" checked> Verbose typing indicator</label>
+      </div>
+      <div style="margin-top:0.9em">
+        <b>Model Selection</b> (OpenRouter.ai):<br>
+        <select id="model-select">
+          <option value="default">Default (coming soon)</option>
+          <!-- More options coming soon -->
+        </select>
+      </div>
+      <button onclick="closeSettings()" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
+
+  <script src="chat.js"></script>
+</body>
+</html>
+
