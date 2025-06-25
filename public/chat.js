@@ -1,42 +1,48 @@
-/**
- * LLM Chat App Frontend (Pro Upgrade + Avatar Upload)
- */
+// LLM Chat App with Modern UI, Hamburger Menu, Avatar Upload, and History Modal
 
-// ========== DOM elements ==========
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 const typingIndicator = document.getElementById("typing-indicator");
-const themeBtn = document.getElementById("theme-toggle");
 const avatarInput = document.getElementById("avatar-upload");
 
-// ========== Avatar Asset ==========
+// Hamburger menu logic
+const menuToggle = document.getElementById("menu-toggle");
+const menuOptions = document.getElementById("menu-options");
+menuToggle.addEventListener("click", () => {
+  menuOptions.classList.toggle("show");
+});
+document.body.addEventListener("click", (e) => {
+  if (!menuToggle.contains(e.target) && !menuOptions.contains(e.target)) {
+    menuOptions.classList.remove("show");
+  }
+}, true);
+
+document.getElementById("theme-switch").onclick = toggleTheme;
+document.getElementById("export-chat").onclick = () => exportChat("txt");
+document.getElementById("change-avatar").onclick = () => avatarInput.click();
+
 const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
 const AVATAR_AI = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Robot_icon.svg";
 const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
 
-// ========== State ==========
 let chatHistory = [];
 let isProcessing = false;
 
-// Load persistent chat
 if (localStorage.getItem("chatHistory")) {
   chatHistory = JSON.parse(localStorage.getItem("chatHistory"));
   chatHistory.forEach(m => renderMessage(m.role, m.content, m.timestamp));
 } else {
-  // Default welcome message
   chatHistory = [
     {
       role: "assistant",
-      content:
-        "Hello! I'm an LLM chat app powered by theWannaBeeesz  Ai. How can I help you today?",
+      content: "Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?",
       timestamp: Date.now()
-    },
+    }
   ];
   renderMessage("assistant", chatHistory[0].content, chatHistory[0].timestamp);
 }
 
-// ========== Event listeners ==========
 userInput.addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = this.scrollHeight + "px";
@@ -48,7 +54,6 @@ userInput.addEventListener("keydown", function (e) {
   }
 });
 sendButton.addEventListener("click", sendMessage);
-themeBtn.addEventListener("click", toggleTheme);
 
 if (avatarInput) {
   avatarInput.addEventListener("change", function(e) {
@@ -64,18 +69,15 @@ if (avatarInput) {
   });
 }
 
-// ========== Theme Toggle ==========
 function toggleTheme() {
   document.body.classList.toggle("light-theme");
   localStorage.setItem("theme", document.body.classList.contains("light-theme") ? "light" : "dark");
 }
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light-theme");
 
-// ========== Main send message ==========
 async function sendMessage() {
   const message = userInput.value.trim();
   if (message === "" || isProcessing) return;
-  // Handle slash commands
   if (message.startsWith("/")) {
     handleSlashCommand(message);
     userInput.value = "";
@@ -141,7 +143,6 @@ function addMessageToChat(role, content) {
   saveHistory();
   scrollChatToBottom();
 }
-
 function renderMessage(role, content, timestamp) {
   const avatar = role === "user" ? AVATAR_USER : AVATAR_AI;
   const html = renderMarkdown(content);
@@ -159,24 +160,21 @@ function renderMessage(role, content, timestamp) {
   scrollChatToBottom();
   return msgDiv.querySelector(".content"); // for streaming effect
 }
-
 async function streamToMessage(el, text) {
   for (let i = 0; i < text.length; ++i) {
     el.innerHTML += text[i];
     await new Promise(res => setTimeout(res, 5));
   }
 }
-
 function renderMarkdown(md) {
   let html = md
-    .replace(/\`([^\`]+)\\`/g, '<code>$1</code>')
+    .replace(/\\`([^\`]+)\\`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\*([^*]+)\*/g, '<i>$1</i>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
   html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
   return html;
 }
-
 function saveHistory() {
   localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 }
@@ -240,7 +238,7 @@ function renderQuickReplies(aiText) {
   if (oldBar) oldBar.remove();
   const bar = document.createElement("div");
   bar.id = "quick-replies";
-  bar.style = "display:flex;gap:8px;margin:12px 0 8px 54px";
+  bar.style = "display:flex;gap:8px;margin:12px 0 8px 38px";
   sampleReplies.forEach(txt => {
     const btn = document.createElement("button");
     btn.textContent = txt;
@@ -253,5 +251,22 @@ function renderQuickReplies(aiText) {
   });
   chatMessages.appendChild(bar);
   scrollChatToBottom();
+}
+
+// Chat History Modal
+function closeHistory() {
+  document.getElementById("history-modal").classList.remove("show");
+}
+document.getElementById("history-btn").onclick = function() {
+  const modal = document.getElementById("history-modal");
+  const list = document.getElementById("history-list");
+  list.innerHTML = "";
+  const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
+  history.slice(-10).forEach(m => {
+    const li = document.createElement("li");
+    li.textContent = `[${formatTime(m.timestamp)}] ${m.role}: ${m.content}`;
+    list.appendChild(li);
+  });
+  modal.classList.add("show");
 }
 

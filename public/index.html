@@ -7,22 +7,29 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header style="display: flex; align-items: center; justify-content: space-between;">
-    <div>
-      <h1>HWMNB A.i.</h1>
-      <p>Powered by a Mad Scientist</p>
-      <div style="margin-bottom:0.8rem">
-        <label for="avatar-upload" style="cursor:pointer;color:var(--primary-accent);font-size:1rem;">Change Avatar</label>
-        <input id="avatar-upload" type="file" accept="image/*" style="display:none;">
-        <a href="https://whobcflare.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">Login</a>
-      </div>
-      <div id="slash-help" style="color:var(--text-light);font-size:1rem;margin-top:0.3rem;">
-        <b>Slash Commands:</b> <span style="opacity:.9">/clear, /export, /export md, /help</span>
-      </div>
+  <!-- Hamburger Menu -->
+  <div id="hamburger-menu">
+    <button id="menu-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="menu-options" class="hidden">
+      <ul>
+        <li><a href="#" id="history-btn">Chat History</a></li>
+        <li><a href="#" id="change-avatar">Change Avatar</a></li>
+        <li><a href="#" id="export-chat">Export Chat</a></li>
+        <li><a href="#" id="theme-switch">Toggle Theme</a></li>
+        <li><a href="https://whobcflareaccess.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">Login</a></li>
+      </ul>
+    </nav>
+  </div>
+  <header>
+    <h1>|HWMNB\a.i.-chat/HWMNB|</h1>
+    <p>Powered by a few Mad Scientists</p>
+    <div id="slash-help" style="color:var(--text-light);font-size:0.98rem;margin-top:0.4rem;">
+      <b>Slash Commands:</b> <span style="opacity:.9">/clear, /export, /export md, /help</span>
     </div>
-    <button id="theme-toggle" style="margin-left:1rem">Toggle Theme</button>
+    <input id="avatar-upload" type="file" accept="image/*" style="display:none;">
   </header>
-
   <div class="chat-container">
     <div id="chat-messages" class="chat-messages"></div>
     <div class="typing-indicator" id="typing-indicator">AI is thinking...</div>
@@ -32,8 +39,16 @@
     </div>
   </div>
   <footer>
-    <p>theWannaBeeesz &copy; 2025</p>
+    <p>Thw WannaBeeesz &copy; 2025</p>
   </footer>
+  <!-- Chat History Modal -->
+  <div id="history-modal" class="hidden">
+    <div class="history-modal-content">
+      <h3>Chat History</h3>
+      <ul id="history-list"></ul>
+      <button onclick="closeHistory()" style="margin-top:1rem;">Close</button>
+    </div>
+  </div>
   <script src="chat.js"></script>
 </body>
 </html>
