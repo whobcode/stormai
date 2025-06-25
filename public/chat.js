@@ -109,67 +109,39 @@ if (localStorage.getItem("chatHistory")) {
 
 // Input/Container glow + SVG color shift
 let typingTimeout;
-userInput.addEventListener("input", function () {
-  this.style.height = "auto";
-  this.style.height = this.scrollHeight + "px";
-  this.classList.add("typing-glow");
-  chatContainer.classList.add("typing");
-  if (!document.body.classList.contains("light-theme"))
-    this.style.color = "#151411";
-  document.getElementById("cat-moon-svg").classList.add("glow");
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    this.classList.remove("typing-glow");
-    chatContainer.classList.remove("typing");
-    if (!document.body.classList.contains("light-theme"))
-      this.style.color = "#fafcff";
-    document.getElementById("cat-moon-svg").classList.remove("glow");
-  }, 1400);
-});
-userInput.addEventListener("input", function () {
-  this.style.height = "auto";
-  this.style.height = this.scrollHeight + "px";
-  this.classList.add("typing-glow");
-  chatContainer.classList.add("typing");
-  // Always black text in light theme when typing
-  if (document.body.classList.contains("light-theme")) {
-    this.style.color = "#151411";
-  } else {
-    this.style.color = "#151411";
-  }
-  document.getElementById("cat-moon-svg").classList.add("glow");
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    this.classList.remove("typing-glow");
-    chatContainer.classList.remove("typing");
-    // Light theme: always black
-    if (document.body.classList.contains("light-theme")) {
-      this.style.color = "#151411";
-    } else {
-      // Dark theme: white when not typing
-      this.style.color = "#fafcff";
-    }
-    document.getElementById("cat-moon-svg").classList.remove("glow");
-  }, 1400);
+userInput.addEventListener("focus", function () {
+  // Always black text when engaged/focused (any theme)
+  this.style.color = "#151411";
 });
 
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
+  document.getElementById("cat-moon-svg").classList.remove("glow");
+  // Light theme: always black, Dark theme: white when not engaged
   if (document.body.classList.contains("light-theme")) {
     this.style.color = "#151411";
   } else {
     this.style.color = "#fafcff";
   }
-  document.getElementById("cat-moon-svg").classList.remove("glow");
 });
 
-userInput.addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
+userInput.addEventListener("input", function () {
+  this.style.height = "auto";
+  this.style.height = this.scrollHeight + "px";
+  this.classList.add("typing-glow");
+  chatContainer.classList.add("typing");
+  document.getElementById("cat-moon-svg").classList.add("glow");
+  // No need to set color here! Focus handles it.
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    this.classList.remove("typing-glow");
+    chatContainer.classList.remove("typing");
+    document.getElementById("cat-moon-svg").classList.remove("glow");
+    // No color changes here either!
+  }, 1400);
 });
+
 sendButton.addEventListener("click", sendMessage);
 
 if (avatarInput) {
