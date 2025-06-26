@@ -251,14 +251,20 @@ function addMessageToChat(role, content) {
   saveHistory();
   scrollChatToBottom();
 }
+
+
 function renderMessage(role, content, timestamp) {
-  const avatar = role === "user" ? AVATAR_USER : AVATAR_AI;
+  const avatar = role === "user" ? AVATAR_USER : null;
   const html = renderMarkdown(content);
   const time = timestamp ? formatTime(timestamp) : "";
   const msgDiv = document.createElement("div");
   msgDiv.className = `message ${role}-message`;
   msgDiv.innerHTML = `
-    <img class="avatar" src="${avatar}" alt="${role}" />
+    ${
+      role === "assistant"
+        ? AVATAR_AI
+        : `<img class="avatar" src="${avatar}" alt="User Avatar" />`
+    }
     <div class="bubble">
       <div class="content">${html}</div>
       <div class="timestamp">${time}</div>
@@ -266,8 +272,9 @@ function renderMessage(role, content, timestamp) {
   `;
   chatMessages.appendChild(msgDiv);
   scrollChatToBottom();
-  return msgDiv.querySelector(".content"); // for streaming effect
+  return msgDiv.querySelector(".content");
 }
+
 async function streamToMessage(el, text) {
   for (let i = 0; i < text.length; ++i) {
     el.innerHTML += text[i];
