@@ -90,7 +90,8 @@ document.getElementById('clear-settings-btn').onclick = function(){
 };
 
 const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
-const AVATAR_AI = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Robot_icon.svg";
+const AVATAR_AI = 'data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="36" rx="13" ry="15" fill="%2323221e"/><circle cx="30" cy="22" r="10" fill="%2323221e"/><ellipse cx="22" cy="12" rx="2.8" ry="7" fill="%2323221e" transform="rotate(-22 22 12)"/><ellipse cx="38" cy="12" rx="2.8" ry="7" fill="%2323221e" transform="rotate(22 38 12)"/><ellipse cx="20" cy="43" rx="3" ry="10" fill="%2323221e" transform="rotate(-12 20 43)"/><ellipse cx="40" cy="43" rx="3" ry="10" fill="%2323221e" transform="rotate(12 40 43)"/><ellipse cx="46" cy="40" rx="2" ry="9" fill="%2323221e" transform="rotate(40 46 40)"/><ellipse cx="14" cy="40" rx="2" ry="9" fill="%2323221e" transform="rotate(-40 14 40)"/><ellipse cx="26" cy="20" rx="1.6" ry="1.6" fill="white"/><ellipse cx="34" cy="20" rx="1.6" ry="1.6" fill="white"/><ellipse cx="30" cy="28" rx="2" ry="1" fill="white"/></svg>';
+
 const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
 
 let chatHistory = [];

@@ -420,4 +420,7 @@ body.light-theme {
 #cat-entity.cat-paused svg {
   filter: drop-shadow(0 0 22px #ffe484) brightness(1.14);
 }
+#settings-modal.show {
+  display: block !important;
+}
 
