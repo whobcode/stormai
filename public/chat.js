@@ -412,7 +412,7 @@ function showHistory() {
 }
 // ---- AI CAT ENTITY LOGIC ----
 (function () {
-  const catSVG = `
+  const catSVG = ``
   <svg viewBox="0 0 60 60" fill="none">
     <ellipse cx="30" cy="52" rx="21" ry="7" fill="#22232b" fill-opacity="0.28"/>
     <g>
@@ -430,7 +430,7 @@ function showHistory() {
     <circle cx="34" cy="20" r="1.6" fill="#fff"/>
     <ellipse cx="30" cy="28" rx="2" ry="1" fill="#eee"/>
   </svg>
-  `;
+  ``;
   const cat = document.getElementById("cat-entity");
   cat.innerHTML = catSVG;
 
