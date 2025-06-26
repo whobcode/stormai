@@ -22,11 +22,15 @@ document.getElementById("change-avatar").onclick = () => avatarInput.click();
 document.getElementById("info-btn").onclick = function() {
   document.getElementById("info-modal").classList.remove("hidden");
 };
-function closeInfo() { document.getElementById("info-modal").classList.add("hidden"); }
-document.getElementById("settings-btn").onclick = function() {
-  document.getElementById("settings-modal").classList.remove("hidden");
+function closeInfo(){ 
+  document.getElementById("info-modal").classList.add("hidden"); 
 };
-function closeSettings() { document.getElementById("settings-modal").classList.add("hidden"); }
+document.getElementById("settings-btn").onclick = function() {
+  document.getElementById("settings-modal").classList.add("show");
+};
+function closeSettings() { 
+  document.getElementById("settings-modal").classList.remove("show"); 
+};
 
 // Verbose typing indicator toggle
 const verboseToggle = document.getElementById("verbose-toggle");
@@ -224,7 +228,7 @@ async function sendMessage() {
       }
     }
     chatHistory.push({ role: "assistant", content: responseText, timestamp: Date.now() });
-    saveHistory();
+    saveHistory()
     playSound();
     renderQuickReplies(responseText);
   } catch (error) {
@@ -412,7 +416,7 @@ function showHistory() {
 }
 // ---- AI CAT ENTITY LOGIC ----
 (function () {
-  const catSVG = ``
+  const catSVG = `
   <svg viewBox="0 0 60 60" fill="none">
     <ellipse cx="30" cy="52" rx="21" ry="7" fill="#22232b" fill-opacity="0.28"/>
     <g>
@@ -430,9 +434,9 @@ function showHistory() {
     <circle cx="34" cy="20" r="1.6" fill="#fff"/>
     <ellipse cx="30" cy="28" rx="2" ry="1" fill="#eee"/>
   </svg>
-  ``;
+  `;
   const cat = document.getElementById("cat-entity");
-  cat.innerHTML = catSVG;
+  if (cat) cat.innerHTML = catSVG;
 
   // Find the moon center (relative to viewport)
   function getMoonCenter() {
