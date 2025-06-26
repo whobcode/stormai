@@ -410,4 +410,96 @@ function showHistory() {
   renderFilteredHistory();
   modal.classList.add("show");
 }
+// ---- AI CAT ENTITY LOGIC ----
+(function () {
+  const catSVG = `
+  <svg viewBox="0 0 60 60" fill="none">
+    <ellipse cx="30" cy="52" rx="21" ry="7" fill="#22232b" fill-opacity="0.28"/>
+    <g>
+      <ellipse cx="30" cy="36" rx="13" ry="15" fill="#23221e"/>
+      <circle cx="30" cy="22" r="10" fill="#23221e"/>
+      <ellipse cx="22" cy="12" rx="2.8" ry="7" fill="#23221e" transform="rotate(-22 22 12)"/>
+      <ellipse cx="38" cy="12" rx="2.8" ry="7" fill="#23221e" transform="rotate(22 38 12)"/>
+      <ellipse cx="20" cy="43" rx="3" ry="10" fill="#23221e" transform="rotate(-12 20 43)"/>
+      <ellipse cx="40" cy="43" rx="3" ry="10" fill="#23221e" transform="rotate(12 40 43)"/>
+      <ellipse cx="46" cy="40" rx="2" ry="9" fill="#23221e" transform="rotate(40 46 40)"/>
+      <ellipse cx="14" cy="40" rx="2" ry="9" fill="#23221e" transform="rotate(-40 14 40)"/>
+      <ellipse cx="29" cy="51" rx="5.5" ry="2" fill="#111" fill-opacity="0.18"/>
+    </g>
+    <circle cx="26" cy="20" r="1.6" fill="#fff"/>
+    <circle cx="34" cy="20" r="1.6" fill="#fff"/>
+    <ellipse cx="30" cy="28" rx="2" ry="1" fill="#eee"/>
+  </svg>
+  `;
+  const cat = document.getElementById("cat-entity");
+  cat.innerHTML = catSVG;
+
+  // Find the moon center (relative to viewport)
+  function getMoonCenter() {
+    const moon = document.getElementById("moon");
+    if (!moon) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const rect = moon.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2
+    };
+  }
+
+  // Movement bounds (full window)
+  function randomPos() {
+    const padding = 20;
+    const w = window.innerWidth - cat.offsetWidth - padding;
+    const h = window.innerHeight - cat.offsetHeight - padding;
+    return {
+      x: Math.floor(padding + Math.random() * w),
+      y: Math.floor(padding + Math.random() * h)
+    };
+  }
+
+  let roaming = true, roamTimer, typing = false;
+
+  function roamCat() {
+    if (!roaming) return;
+    const { x, y } = randomPos();
+    cat.style.left = x + "px";
+    cat.style.top = y + "px";
+    cat.classList.remove("cat-paused");
+    // Vary interval and movement
+    roamTimer = setTimeout(roamCat, 1300 + Math.random() * 2700);
+  }
+
+  function goToMoon() {
+    roaming = false;
+    clearTimeout(roamTimer);
+    cat.classList.add("cat-paused");
+    const moonCenter = getMoonCenter();
+    // Move cat toward moon, offset to bottom right (so it "sits" next to moon)
+    cat.style.left = (moonCenter.x + 40) + "px";
+    cat.style.top = (moonCenter.y + 48) + "px";
+  }
+
+  // Observe typing
+  const chatContainer = document.getElementById("chat-container");
+  const observer = new MutationObserver(() => {
+    const isTyping = chatContainer.classList.contains("typing");
+    if (isTyping && !typing) {
+      typing = true;
+      goToMoon();
+    } else if (!isTyping && typing) {
+      typing = false;
+      roaming = true;
+      roamCat();
+    }
+  });
+  observer.observe(chatContainer, { attributes: true, attributeFilter: ["class"] });
+
+  // On resize, cat stays in bounds
+  window.addEventListener("resize", () => {
+    if (roaming) roamCat();
+    else goToMoon();
+  });
+
+  // Start roaming on load
+  setTimeout(roamCat, 900);
+})();
 
