@@ -49,7 +49,7 @@ footer {
   position: relative;
   border: none;
   border-radius: 18px;
-  background: var(--surface-bg);
+  background: none;
   box-shadow: 0 0 44px 14px #ffb864, 0 2px 38px 0 #000b;
   overflow: hidden;
   display: flex;
