@@ -460,4 +460,17 @@ body.light-theme {
   transition: color 0.17s;
 }
 .bottom-menu button:hover { color: #ffd864; }
+#full-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('ai_rick.jpeg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(14px) brightness(0.58);
+  transform: scale(1.13);
+  z-index: 0;
+  pointer-events: none;
+}
 
