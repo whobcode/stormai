@@ -534,4 +534,12 @@ body.light-theme {
 #send-button:hover {
   background: linear-gradient(90deg, #fffbe2, #ffd864 90%);
 }
+#user-input:focus,
+#user-input.typing-glow {
+  box-shadow: 0 0 22px 8px #ffae33cc, 0 1px 7px #eea14260;
+  background: #fff8f2;
+  outline: 2px solid var(--input-outline);
+  color: #151411 !important;
+  transition: box-shadow 0.25s, background 0.2s, color 0.2s;
+}
 
