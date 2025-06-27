@@ -262,7 +262,7 @@ function renderMessage(role, content, timestamp) {
   msgDiv.innerHTML = `
     ${
       role === "assistant"
-        ? AVATAR_AI
+        ? `<img class="avatar" src="${AVATAR_AI}" alt="AI Avatar" />`
         : `<img class="avatar" src="${avatar}" alt="User Avatar" />`
     }
     <div class="bubble">
