@@ -104,7 +104,7 @@
   </div>
 
   <header>
-    <h1>|HWMNB\a.i.-chat/HWMNB|</h1>
+    <h1>|/HWMNB\.a.i./HWMNB\|</h1>
     <input id="avatar-upload" type="file" accept="image/*" style="display:none;">
   </header>
 
@@ -131,15 +131,24 @@
         </g>
       </svg--->
     </div>
+    <div id="bottom-bar">
+      <form id="input-form" enctype="multipart/form-data" autocomplete="off">
+        <label for="file-upload" id="upload-label">📎</label>
+        <input type="file" id="file-upload" style="display:none;" multiple>
+        <textarea id="user-input" placeholder="Type your message here..." rows="1" autocomplete="off"></textarea>
+        <button id="send-button" type="submit">Send</button>
+    <!-- Add more action buttons if needed -->
+      </form>
+    </div> 
     <div id="chat-messages" class="chat-messages"></div>
     <div class="typing-indicator" id="typing-indicator">
       <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
       <span id="typing-text"></span>
     </div>
-    <div class="message-input">
+    <!-- div class="message-input">
       <textarea id="user-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
       <button id="send-button">Send</button>
-    </div>
+    </div-->
   </div>
 
   <footer>
