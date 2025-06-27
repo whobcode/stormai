@@ -493,6 +493,7 @@ body.light-theme {
   width: 60%;
   max-width: 455px;
   gap: 0.5em;
+  position: relative;
 }
 
 #upload-label {
