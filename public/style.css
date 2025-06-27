@@ -49,7 +49,8 @@ footer {
   position: relative;
   border: none;
   border-radius: 18px;
-  background: none;
+  background: rgba(34, 35, 43, 0.75);
+  backdrop-filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864, 0 2px 38px 0 #000b;
   overflow: hidden;
   display: flex;
@@ -57,6 +58,7 @@ footer {
   height: 67vh;
   min-height: 330px;
   transition: box-shadow 0.22s;
+  z-index: 1;
 }
 .chat-container.typing {
   box-shadow: 0 0 24px 5px #ffb864a9, 0 2px 32px 0 #0009;
@@ -159,11 +161,14 @@ footer {
   border-top-right-radius: 0.35rem;
 }
 .message-input {
-  position: relative;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   padding: 0.75rem 0.9rem;
   border-top: 1px solid var(--border-color);
-  background: transparent;
+  background: rgba(35,32,25,0.7);
   align-items: end;
   min-height: 62px;
 }
@@ -432,8 +437,27 @@ body.light-theme {
   background-image: url('ai_rick.jpeg');
   background-size: cover;
   background-position: center;
-  opacity: none; /* adjust opacity if needed */
+  opacity: 0.1; /* adjust opacity if needed */
   pointer-events: none;
   z-index: 1;
 }
+.bottom-menu {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0.75rem 0 0.6rem 0;
+  background: rgba(20,20,20,0.33);
+  position: sticky;
+  bottom: 0;
+  z-index: 11;
+}
+.bottom-menu button {
+  background: none;
+  border: none;
+  color: #fff9;
+  font-size: 1.07rem;
+  cursor: pointer;
+  transition: color 0.17s;
+}
+.bottom-menu button:hover { color: #ffd864; }
 
