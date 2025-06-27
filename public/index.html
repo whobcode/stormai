@@ -152,6 +152,14 @@
   </div>
 
   <footer>
+    <div id="bottom-bar">
+      <form id="input-form" enctype="multipart/form-data" autocomplete="off">
+        <label for="file-upload" id="upload-label">📎</label>
+        <input type="file" id="file-upload" style="display:none;" multiple>
+        <textarea id="user-input" placeholder="Type your message here..." rows="1"></textarea>
+        <button id="send-button" type="submit">Send</button>
+      </form>
+     </div>
     <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; color:var(--text-light); font-size: 0.86rem;">
       <span>Powered by <b>a few mad scientists</b></span>
       <span style="font-size:0.75rem;">theWannaBeeesz &copy; 2025</span>
