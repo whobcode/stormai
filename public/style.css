@@ -437,7 +437,7 @@ body.light-theme {
   background-image: url('ai_rick.jpeg');
   background-size: cover;
   background-position: center;
-  opacity: 0.1; /* adjust opacity if needed */
+  opacity: 0.63; /* adjust opacity if needed */
   pointer-events: none;
   z-index: 1;
 }
