@@ -437,7 +437,7 @@ body.light-theme {
   background-image: url('ai_rick.jpeg');
   background-size: cover;
   background-position: center;
-  opacity: 0.63; /* adjust opacity if needed */
+  opacity: 0.75; /* adjust opacity if needed */
   pointer-events: none;
   z-index: 1;
 }
@@ -468,7 +468,7 @@ body.light-theme {
   background-image: url('ai_rick.jpeg');
   background-size: cover;
   background-position: center;
-  filter: blur(14px) brightness(0.58);
+  filter: blur(28px) brightness(0.58);
   transform: scale(1.13);
   z-index: 0;
   pointer-events: none;
@@ -489,9 +489,9 @@ body.light-theme {
 
 #input-form {
   display: flex;
-  align-items: flex-end;
-  width: 100%;
-  max-width: 730px;
+  align-items: flex;
+  width: 60%;
+  max-width: 455px;
   gap: 0.5em;
 }
 
@@ -514,7 +514,7 @@ body.light-theme {
   border: 1px solid #2227;
   padding: 0.85em 1.1em;
   font-size: 1.1em;
-  resize: vertical;
+  resize: both;
   outline: none;
 }
 #user-input:focus { border-color: #ffd864; background: #23221e22; }
@@ -529,6 +529,7 @@ body.light-theme {
   font-size: 1.07em;
   cursor: pointer;
   transition: background 0.18s;
+  position: relative;
 }
 
 #send-button:hover {
