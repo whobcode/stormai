@@ -51,7 +51,6 @@ footer {
   border: none;
   border-radius: 18px;
   background: rgba(34, 35, 43, 0.75);
-  filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864, 0 2px 38px 0 #000b;
   overflow: hidden;
   display: flex;
@@ -59,7 +58,7 @@ footer {
   height: 67vh;
   min-height: 330px;
   transition: box-shadow 0.22s;
-  z-index: 1;
+  z-index: 2000;
 }
 .chat-container.typing {
   box-shadow: 0 0 24px 5px #ffb864a9, 0 2px 32px 0 #0009;
@@ -78,6 +77,14 @@ footer {
 .chat-container.typing #cat-moon-svg #moon {
   filter: drop-shadow(0 0 40px #ffe484) brightness(1.4);
   stroke: #fff7a1;
+}
+.chat-container.typing #cat-moon-svg #catHead,
+.chat-container.typing #cat-moon-svg #catBody,
+.chat-container.typing #cat-moon-svg #catTail,
+.chat-container.typing #cat-moon-svg #catEar1,
+.chat-container.typing #cat-moon-svg #catEar2 {
+  filter: drop-shadow(0 0 13px #ffae33cc);
+  stroke: #ffb864;
 }
 .chat-messages {
   position: relative;
@@ -136,11 +143,11 @@ footer {
   min-width: 22px;
   max-width: 85vw;
   background: rgba(35, 34, 30, 0.38);
-  filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
 }
 .user-message .bubble {
   background: linear-gradient(105deg, rgba(238,65,65,0.33) 60%, rgba(177,50,50,0.25) 100%);
-  filter: blur(2px);
+  backdrop-filter: blur(2px);
   color: #fff;
   border-bottom-right-radius: 1.6rem;
   border-top-left-radius: 0.35rem;
@@ -282,13 +289,6 @@ body.light-theme #user-input {
   padding: 0.33rem 0.8rem;
   border-radius: 1rem;
   background: var(--primary-accent);
-  color: #22232b;
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #e2b98444;
-  transition: background 0.15s;
-}
 #quick-replies button:hover {
   background: #f7cf92;
 }
@@ -409,9 +409,9 @@ body.light-theme {
   background-image: url('ai_rick.jpeg');
   background-size: cover;
   background-position: center;
-  opacity: 0.75; /* adjust opacity if needed */
+  opacity: 0.25; /* adjust opacity if needed */
   pointer-events: none;
-  z-index: 1;
+  z-index: 1500;
 }
 .bottom-menu {
   display: flex;
@@ -515,3 +515,41 @@ body.light-theme {
   transition: box-shadow 0.25s, background 0.2s, color 0.2s;
 }
 
+:root {
+  --primary-color: #ee4141;
+  --primary-hover: #b81c1c;
+  --primary-accent: #e2b984;
+  --light-bg: #16181d;
+  --surface-bg: #22232b;
+  --surface-light: #282c36;
+  --border-color: #23242a;
+  --text-color: #f5f5f7;
+  --text-light: #888fa1;
+  --user-msg-bg: var(--primary-color);
+  --assistant-msg-bg: var(--surface-bg);
+  --input-glow: 0 0 16px 3px #ffb864, 0 2px 12px #eea14288;
+  --input-bg-light: #fff3e7;
+  --input-bg-dark: #23252c;
+  --input-glow-bright: 0 0 22px 8px #ffae33cc, 0 1px 7px #eea14260;
+  --input-outline: #ffb864;
+}
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  background: var(--light-bg);
+  color: var(--text-color);
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 1rem 1rem;
+  letter-spacing: 0.02em;
+}
+header, footer {
+  width: 85vw;
+  height: 20vh;
+  background-image: url('ai_rick.jpeg');
+  background-size: cover;
+  background-position: relative;
+  filter: brightness(-0.58);
+  transform: scale(.17);
+  z-index: 110;
+  pointer-events: none;
