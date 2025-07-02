@@ -87,7 +87,7 @@
           </a>
         </li>
         <li>
-          <a href="https://whobcflareaccess.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">
+          <a href="https://hwmnbai.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">
             <span class="menu-icon" aria-hidden="true">
               <!-- Login Icon SVG -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -116,10 +116,6 @@
       <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
       <span id="typing-text"></span>
     </div>
-    <!-- div class="message-input">
-      <textarea id="user-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
-      <button id="send-button">Send</button>
-    </div-->
   </div>
 
   <footer>
@@ -165,7 +161,36 @@
       <button onclick="closeInfo()" style="margin-top:1rem;">Close</button>
     </div>
   </div>
+  <!--  Sign up & Survey  -->
+  <div id="signup-modal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Sign Up</h3>
+    <form id="signup-form">
+      <input type="text" name="firstName" placeholder="First Name" required>
+      <input type="text" name="lastName" placeholder="Last Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="phone" placeholder="Phone" required>
+      <textarea name="aiPurpose" placeholder="What do you want from your AI?" required></textarea>
+      <hr>
+      <h4>Personalization</h4>
+      <input type="date" name="dob" placeholder="Date of Birth" required>
+      <input type="text" name="favoriteColor" placeholder="Favorite Color" required>
+      <input type="text" name="favoriteAnimal" placeholder="Favorite Animal">
+      <textarea name="stylePrefs" placeholder="Describe your aesthetic or visual style preferences..."></textarea>
+      <button type="submit">Create Account</button>
+    </form>
+    <p style="text-align:center;margin-top:1em;">Already have an account? <button id="show-login" class="login-btn">Login</button></p>
+  </div>
+  </div> 
 
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Login with Cloudflare Access</h3>
+      <p style="text-align:center;">Please <a href="/cdn-cgi/access/login" class="login-btn">login with your Cloudflare Access account</a>.</p>
+      <p style="text-align:center;margin-top:1em;">Don't have an account? <button id="show-signup" class="login-btn">Sign Up</button></p>
+    </div>
+  </div>
   <!-- Settings Modal -->
   <div id="settings-modal" class="hidden">
     <div class="modal-content">
@@ -188,9 +213,6 @@
       <button onclick="closeSettings()" style="margin-top:1rem;">Close</button>
     </div>
   </div>
-
   <script src="chat.js"></script>
-  <!-- Cat SVG Entity (overlay, absolutely positioned) -->
-  <!--div id="cat-entity" aria-label="AI Cat"></div-->
 </body>
 </html>

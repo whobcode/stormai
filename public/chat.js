@@ -3,13 +3,39 @@ const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 const avatarInput = document.getElementById("avatar-upload");
 const chatContainer = document.getElementById("chat-container");
-
+const signupModal = document.getElementById("signup-modal");
+const loginModal = document.getElementById("login-modal");
 // Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
 menuToggle.addEventListener("click", () => {
   menuOptions.classList.toggle("show");
 });
+document.getElementById("show-login").onclick = () => {
+  signupModal.classList.add("hidden");
+  loginModal.classList.remove("hidden");
+};
+document.getElementById("show-signup").onclick = () => {
+  loginModal.classList.add("hidden");
+  signupModal.classList.remove("hidden");
+};
+document.getElementById("signup-form").onsubmit = async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  try {
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Signup failed");
+    alert("Welcome, " + data.firstName + "! Your preferences are saved.");
+    signupModal.classList.add("hidden");
+  } catch (err) {
+    console.error("Signup error:", err);
+    alert("There was a problem signing up. Please try again.");
+  }
+};
 document.body.addEventListener("click", (e) => {
   if (!menuToggle.contains(e.target) && !menuOptions.contains(e.target)) {
     menuOptions.classList.remove("show");
