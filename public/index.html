@@ -161,36 +161,6 @@
       <button onclick="closeInfo()" style="margin-top:1rem;">Close</button>
     </div>
   </div>
-  <!--  Sign up & Survey  -->
-  <div id="signup-modal" class="modal hidden">
-  <div class="modal-content">
-    <h3>Sign Up</h3>
-    <form id="signup-form">
-      <input type="text" name="firstName" placeholder="First Name" required>
-      <input type="text" name="lastName" placeholder="Last Name" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <input type="tel" name="phone" placeholder="Phone" required>
-      <textarea name="aiPurpose" placeholder="What do you want from your AI?" required></textarea>
-      <hr>
-      <h4>Personalization</h4>
-      <input type="date" name="dob" placeholder="Date of Birth" required>
-      <input type="text" name="favoriteColor" placeholder="Favorite Color" required>
-      <input type="text" name="favoriteAnimal" placeholder="Favorite Animal">
-      <textarea name="stylePrefs" placeholder="Describe your aesthetic or visual style preferences..."></textarea>
-      <button type="submit">Create Account</button>
-    </form>
-    <p style="text-align:center;margin-top:1em;">Already have an account? <button id="show-login" class="login-btn">Login</button></p>
-  </div>
-  </div> 
-
-  <!-- Login Modal -->
-  <div id="login-modal" class="modal hidden">
-    <div class="modal-content">
-      <h3>Login with Cloudflare Access</h3>
-      <p style="text-align:center;">Please <a href="/cdn-cgi/access/login" class="login-btn">login with your Cloudflare Access account</a>.</p>
-      <p style="text-align:center;margin-top:1em;">Don't have an account? <button id="show-signup" class="login-btn">Sign Up</button></p>
-    </div>
-  </div>
   <!-- Settings Modal -->
   <div id="settings-modal" class="hidden">
     <div class="modal-content">
@@ -213,6 +183,84 @@
       <button onclick="closeSettings()" style="margin-top:1rem;">Close</button>
     </div>
   </div>
+  <div id="signup-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Sign Up</h3>
+      <form id="signup-form">
+        <input type="text" name="firstName" placeholder="First Name" required>
+        <input type="text" name="lastName" placeholder="Last Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="tel" name="phone" placeholder="Phone" required>
+        <textarea name="aiPurpose" placeholder="What do you want from your AI?" required></textarea>
+        <hr>
+        <h4>Personalization</h4>
+        <input type="date" name="dob" placeholder="Date of Birth" required>
+        <input type="text" name="favoriteColor" placeholder="Favorite Color" required>
+        <input type="text" name="favoriteAnimal" placeholder="Favorite Animal">
+        <textarea name="stylePrefs" placeholder="Describe your aesthetic or visual style preferences..."></textarea>
+        <button type="submit">Create Account</button>
+      </form>
+      <p style="text-align:center;margin-top:1em;">Already have an account? <button id="show-login" class="login-btn">Login</button></p>
+    </div>
+  </div>
+
+<!-- Login Modal -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Login with Cloudflare Access</h3>
+      <p style="text-align:center;">Please <a href="/cdn-cgi/access/login" class="login-btn">login with your Cloudflare Access account</a>.</p>
+      <p style="text-align:center;margin-top:1em;">Don't have an account? <button id="show-signup" class="login-btn">Sign Up</button></p>
+    </div>
+  </div>
+  <script>
+  const signupModal = document.getElementById("signup-modal");
+  const loginModal = document.getElementById("login-modal");
+  let anonRequestCount = 0;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const authenticated = document.cookie.includes("CF_Authorization");
+    if (!authenticated) {
+      // Intercept and count user send actions
+      const sendOriginal = sendMessage;
+      window.sendMessage = function(...args) {
+        anonRequestCount++;
+        if (anonRequestCount >= 5) {
+          signupModal.classList.remove("hidden");
+          return; // Block send
+        }
+        return sendOriginal.apply(this, args);
+      }
+    }
+  });
+
+  document.getElementById("show-login").onclick = () => {
+    signupModal.classList.add("hidden");
+    loginModal.classList.remove("hidden");
+  };
+  document.getElementById("show-signup").onclick = () => {
+    loginModal.classList.add("hidden");
+    signupModal.classList.remove("hidden");
+  };
+
+  document.getElementById("signup-form").onsubmit = async e => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error("Signup failed");
+      // ⬇️ Display instructions for admin to add this email to Access policy
+      alert("Welcome, " + data.firstName + "! Your preferences are saved.\n\nPlease wait to be granted access via email policy.");
+      signupModal.classList.add("hidden");
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("There was a problem signing up. Please try again.");
+    }
+  };
+  </script>
   <script src="chat.js"></script>
 </body>
 </html>
