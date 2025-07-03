@@ -118,7 +118,7 @@ document.getElementById('clear-settings-btn').onclick = function(){
   }
 };
 
-const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
+const AVATAR_USER = "images/logo.png" || "https://avatars.githubusercontent.com/u/583231?v=4";
 const AVATAR_AI = "rick_head.jpg";
 const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
 
