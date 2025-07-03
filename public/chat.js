@@ -5,23 +5,41 @@ const avatarInput = document.getElementById("avatar-upload");
 const chatContainer = document.getElementById("chat-container");
 const signupModal = document.getElementById("signup-modal");
 const loginModal = document.getElementById("login-modal");
+
 // Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
 let anonRequestCount = 0;
 const authenticated = document.cookie.includes("CF_Authorization");
+
+// Hamburger open/close robustly toggles hidden/show
 menuToggle.addEventListener("click", () => {
-  menuOptions.classList.toggle("show");
-  menuOptions.classList.remove("hidden");
+  if (menuOptions.classList.contains("show")) {
+    menuOptions.classList.remove("show");
+    menuOptions.classList.add("hidden");
+  } else {
+    menuOptions.classList.add("show");
+    menuOptions.classList.remove("hidden");
+  }
 });
+document.body.addEventListener("click", (e) => {
+  if (!menuToggle.contains(e.target) && !menuOptions.contains(e.target)) {
+    menuOptions.classList.remove("show");
+    menuOptions.classList.add("hidden");
+  }
+}, true);
+
+// Modal open/close
 document.getElementById("show-login").onclick = () => {
-  signupModal.classList.toggle("show");
+  signupModal.classList.add("hidden");
   loginModal.classList.remove("hidden");
 };
 document.getElementById("show-signup").onclick = () => {
-  loginModal.classList.toggle("show");
+  loginModal.classList.add("hidden");
   signupModal.classList.remove("hidden");
 };
+
+// Signup form handler
 document.getElementById("signup-form").onsubmit = async e => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(e.target).entries());
@@ -39,12 +57,8 @@ document.getElementById("signup-form").onsubmit = async e => {
     alert("There was a problem signing up. Please try again.");
   }
 };
-document.body.addEventListener("click", (e) => {
-  if (!menuToggle.contains(e.target) && !menuOptions.contains(e.target)) {
-    menuOptions.classList.remove("show");
-  }
-}, true);
 
+// Other menu actions
 document.getElementById("theme-switch").onclick = toggleTheme;
 document.getElementById("export-chat").onclick = () => exportChat("txt");
 document.getElementById("change-avatar").onclick = () => avatarInput.click();
@@ -118,7 +132,8 @@ document.getElementById('clear-settings-btn').onclick = function(){
   }
 };
 
-const AVATAR_USER = "images/logo.png" || "https://avatars.githubusercontent.com/u/583231?v=4";
+// Use a persistent avatar, fallback to GitHub octocat
+const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
 const AVATAR_AI = "rick_head.jpg";
 const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
 
@@ -146,40 +161,41 @@ userInput.addEventListener("focus", function () {
   // Always black text when engaged/focused (any theme)
   this.style.color = "#151411";
 });
-
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
-  document.getElementById("cat-moon-svg").classList.remove("glow");
-  // Light theme: always black, Dark theme: white when not engaged
+  // Only run if the element exists
+  const catMoonSvg = document.getElementById("cat-moon-svg");
+  if (catMoonSvg) catMoonSvg.classList.remove("glow");
   if (document.body.classList.contains("light-theme")) {
     this.style.color = "#151411";
   } else {
     this.style.color = "#fafcff";
   }
 });
-
 userInput.addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = this.scrollHeight + "px";
   this.classList.add("typing-glow");
   chatContainer.classList.add("typing");
-  document.getElementById("cat-moon-svg").classList.add("glow");
-  // No need to set color here! Focus handles it.
+  const catMoonSvg = document.getElementById("cat-moon-svg");
+  if (catMoonSvg) catMoonSvg.classList.add("glow");
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(() => {
     this.classList.remove("typing-glow");
     chatContainer.classList.remove("typing");
-    document.getElementById("cat-moon-svg").classList.remove("glow");
-    // No color changes here either!
+    if (catMoonSvg) catMoonSvg.classList.remove("glow");
   }, 1400);
 });
+
+// Handle form submit and send button click
 document.getElementById("input-form").addEventListener("submit", e => {
   e.preventDefault(); // prevent page reload
   sendMessage();
 });
 sendButton.addEventListener("click", sendMessage);
 
+// Avatar upload logic
 if (avatarInput) {
   avatarInput.addEventListener("change", function(e) {
     const file = e.target.files[0];
@@ -219,8 +235,8 @@ async function sendMessage() {
   if (message === "" || isProcessing) return;
   if (!authenticated) {
     anonRequestCount++;
-    if (anonRequestCount >= 5 {
-      signModal.classList.remove("hidden");
+    if (anonRequestCount >= 5) {
+      signupModal.classList.remove("hidden");
       return;
     }
   }
@@ -267,7 +283,7 @@ async function sendMessage() {
       }
     }
     chatHistory.push({ role: "assistant", content: responseText, timestamp: Date.now() });
-    saveHistory()
+    saveHistory();
     playSound();
     renderQuickReplies(responseText);
   } catch (error) {
@@ -289,7 +305,6 @@ function addMessageToChat(role, content) {
   saveHistory();
   scrollChatToBottom();
 }
-
 
 function renderMessage(role, content, timestamp) {
   const avatar = role === "user" ? AVATAR_USER : null;
@@ -514,7 +529,6 @@ function showHistory() {
     cat.style.left = x + "px";
     cat.style.top = y + "px";
     cat.classList.remove("cat-paused");
-    // Vary interval and movement
     roamTimer = setTimeout(roamCat, 1300 + Math.random() * 2700);
   }
 
@@ -523,7 +537,6 @@ function showHistory() {
     clearTimeout(roamTimer);
     cat.classList.add("cat-paused");
     const moonCenter = getMoonCenter();
-    // Move cat toward moon, offset to bottom right (so it "sits" next to moon)
     cat.style.left = (moonCenter.x + 40) + "px";
     cat.style.top = (moonCenter.y + 48) + "px";
   }
@@ -543,13 +556,11 @@ function showHistory() {
   });
   observer.observe(chatContainer, { attributes: true, attributeFilter: ["class"] });
 
-  // On resize, cat stays in bounds
   window.addEventListener("resize", () => {
     if (roaming) roamCat();
     else goToMoon();
   });
 
-  // Start roaming on load
   setTimeout(roamCat, 900);
 })();
 
