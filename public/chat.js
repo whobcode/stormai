@@ -8,15 +8,18 @@ const loginModal = document.getElementById("login-modal");
 // Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
+let anonRequestCount = 0;
+const authenticated = document.cookie.includes("CF_Authorization");
 menuToggle.addEventListener("click", () => {
   menuOptions.classList.toggle("show");
+  menuOptions.classList.remove("hidden");
 });
 document.getElementById("show-login").onclick = () => {
-  signupModal.classList.add("hidden");
+  signupModal.classList.toggle("show");
   loginModal.classList.remove("hidden");
 };
 document.getElementById("show-signup").onclick = () => {
-  loginModal.classList.add("hidden");
+  loginModal.classList.toggle("show");
   signupModal.classList.remove("hidden");
 };
 document.getElementById("signup-form").onsubmit = async e => {
@@ -171,7 +174,10 @@ userInput.addEventListener("input", function () {
     // No color changes here either!
   }, 1400);
 });
-
+document.getElementById("input-form").addEventListener("submit", e => {
+  e.preventDefault(); // prevent page reload
+  sendMessage();
+});
 sendButton.addEventListener("click", sendMessage);
 
 if (avatarInput) {
@@ -211,6 +217,13 @@ function setTypingIndicator(visible) {
 async function sendMessage() {
   const message = userInput.value.trim();
   if (message === "" || isProcessing) return;
+  if (!authenticated) {
+    anonRequestCount++;
+    if (anonRequestCount >= 5 {
+      signModal.classList.remove("hidden");
+      return;
+    }
+  }
   if (message.startsWith("/")) {
     handleSlashCommand(message);
     userInput.value = "";
