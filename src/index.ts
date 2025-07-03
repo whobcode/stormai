@@ -8,6 +8,8 @@
  * @license MIT
  */
 import { Env, ChatMessage } from "./types";
+import { handleSignup } from "./api/signup"; // ⬅️ Create this file next
+
 
 // Model ID for Workers AI model
 // https://developers.cloudflare.com/workers-ai/models/
@@ -39,6 +41,9 @@ export default {
       if (request.method === "POST") {
         return handleChatRequest(request, env);
       }
+    if (url.pathname === "/api/signup" && request.method === "POST") {
+      return handleSignup(request, env);
+    }
 
       // Method not allowed for other request types
       return new Response("Method not allowed", { status: 405 });
