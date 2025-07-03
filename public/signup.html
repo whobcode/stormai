@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - HWMNB A.i.</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+  <img src="images/logo.png" class="site-logo" alt="Logo">
+
+  <h1 class="hero-overlay">|HeWhoMustNotBe|.a.i.|HeWhoMustNotBe|</h1>
+
+  <main class="signup-container">
+    <form id="signup-form">
+      <h2>Create Your Account</h2>
+
+      <input type="text" name="firstName" placeholder="First Name" required>
+      <input type="text" name="lastName" placeholder="Last Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <textarea name="aiPurpose" placeholder="What do you want from your AI?" required></textarea>
+
+      <div class="personalization">
+        <h3>Personalization Survey</h3>
+        <input type="date" name="dob" placeholder="Date of Birth" required>
+        <input type="text" name="favoriteColor" placeholder="Favorite Color" required>
+        <input type="text" name="favoriteAnimal" placeholder="Favorite Animal">
+        <textarea name="stylePrefs" placeholder="Describe your aesthetic or visual style preferences..."></textarea>
+
+        <!-- To add more survey questions, follow this template:
+
+        <input type="text" name="yourCustomField" placeholder="Your custom question here">
+
+        or for a textarea:
+
+        <textarea name="yourCustomField" placeholder="Your detailed question here..."></textarea>
+
+        -->
+      </div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <div id="signup-message"></div>
+  </main>
+
+  <footer class="footer-credits">
+    <span>Powered by <b>a few mad scientists</b></span>
+    <span>theWannaBeeesz &copy; 2025</span>
+  </footer>
+
+  <script>
+    document.getElementById("signup-form").onsubmit = async function(e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      const msg = document.getElementById('signup-message');
+      try {
+        const res = await fetch("/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error("Signup failed");
+        msg.textContent = "Welcome, " + data.firstName + "! Your preferences have been saved. Please wait for access approval.";
+        msg.style.color = "#28a745";
+        e.target.reset();
+      } catch (err) {
+        msg.textContent = "There was an issue signing up. Please try again.";
+        msg.style.color = "#dc3545";
+      }
+    }
+  </script>
+</body>
+</html>
+
