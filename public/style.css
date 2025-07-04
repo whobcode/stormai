@@ -12,6 +12,9 @@
   --user-msg-bg: var(--primary-color);
   --input-bg-dark: #23252c;
   --input-outline: #ffb864;
+  --gradient-primary: linear-gradient(247deg, #2d2d2f, #0c0301);
+  --gradient-hover: linear-gradient(135deg, #4143ff, #090403);
+  --gradient-accent: linear-gradient(135deg, #9affec, #f9fac4);
 }
 
 body {
@@ -25,14 +28,20 @@ body {
 
 .site-logo {
   width: 52px;
-  position: absolute;
+  position: fixed;
   top: 1rem;
   right: 1rem;
   z-index: 21;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px #0005;
-  background: rgba(22,22,25,0.5);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(255,72,72,0.4);
+  background: var(--gradient-primary);
+  animation: bgShift 30s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
   padding: 4px;
+}
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .hero-overlay {
@@ -105,7 +114,7 @@ footer {
   position: sticky;
   border-radius: 18px;
   background: rgba(34, 35, 43, 0.75);
-  backdrop-filter: blur(2.5px);
+  filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864;
   overflow-y: auto;
   height: 60vh;
@@ -146,7 +155,7 @@ footer {
   bottom: 0;
   left: 0;
   width: 100%;
-  backdrop-filter: blur(10px);
+  filter: blur(10px);
   padding: 0.6rem;
 }
 
@@ -167,10 +176,31 @@ footer {
   outline: none;
 }
 
+button[type="submit"] {
+  width: 23%;
+  padding: 0.6rem;
+  margin-top: 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(238,65,65,0.6);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+button[type="submit"]:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(238,65,65,0.8);
+}
+
+
+
 #send-button {
   padding: 0.6rem;
   border-radius: 1rem;
-  background: var(--primary-color);
+  background: var(--gradient-hover);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -206,7 +236,7 @@ footer {
   height: 100vh;
   background-image: url('images/ai_rick.jpeg');
   background-size: cover;
-  background-position: center;
+  background-position: sticky;
   filter: blur(2px) brightness(2.3);
   transform: scale(.99);
   z-index: 0;
