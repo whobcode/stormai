@@ -135,7 +135,6 @@ document.getElementById('clear-settings-btn').onclick = function(){
 
 // Use a persistent avatar, fallback to GitHub octocat
 const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
-const AVATAR_AI = "rick_head.jpg";
 const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
 
 let chatHistory = [];
@@ -165,13 +164,7 @@ userInput.addEventListener("focus", function () {
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
-  // Only run if the element exists
-  const catMoonSvg = document.getElementById("cat-moon-svg");
-  if (catMoonSvg) catMoonSvg.classList.remove("glow");
-  if (document.body.classList.contains("light-theme")) {
-    this.style.color = "#151411";
-  } else {
-    this.style.color = "#fafcff";
+  this.style.color = "#fafcff";
   }
 });
 userInput.addEventListener("input", function () {
@@ -179,13 +172,10 @@ userInput.addEventListener("input", function () {
   this.style.height = this.scrollHeight + "px";
   this.classList.add("typing-glow");
   chatContainer.classList.add("typing");
-  const catMoonSvg = document.getElementById("cat-moon-svg");
-  if (catMoonSvg) catMoonSvg.classList.add("glow");
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(() => {
     this.classList.remove("typing-glow");
     chatContainer.classList.remove("typing");
-    if (catMoonSvg) catMoonSvg.classList.remove("glow");
   }, 1400);
 });
 
@@ -194,7 +184,7 @@ document.getElementById("input-form").addEventListener("submit", e => {
   e.preventDefault(); // prevent page reload
   sendMessage();
 });
-sendButton.addEventListener("click", sendMessage);
+
 
 // Avatar upload logic
 if (avatarInput) {
