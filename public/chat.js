@@ -165,7 +165,6 @@ userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
   this.style.color = "#fafcff";
-  }
 });
 userInput.addEventListener("input", function () {
   this.style.height = "auto";

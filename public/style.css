@@ -73,7 +73,12 @@ footer {
   left: 1rem;
   z-index: 20;
 }
-
+.typing-glow {
+  box-shadow:
+    inset 0 0 12px 2px var(--gradient-accent),
+    0 0 8px var(--gradient-hover);
+  transition: box-shadow .25s ease;
+}
 #menu-toggle {
   background: none;
   border: none;
@@ -105,7 +110,7 @@ footer {
 #menu-options ul { padding: 0; margin: 0; list-style: none; }
 #menu-options li { margin-bottom: 0.5em; }
 #menu-options a {
-  color: var(--primary-color);
+  color: var(--gradient-primary);
   text-decoration: none;
   cursor: pointer;
 }
@@ -121,7 +126,7 @@ footer {
   margin-top: 4rem;
 }
 
-.chat-messages { padding: 1rem; }
+.chat-messages { padding: 1rem; z-index: 2; }
 
 .message { display: flex; margin-bottom: 1rem; }
 .user-message { flex-direction: row-reverse; }
@@ -244,7 +249,7 @@ button[type="submit"]:hover {
   background-position: center;
   opacity: 0.75; 
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 #full-bg {
@@ -255,11 +260,12 @@ button[type="submit"]:hover {
   background-image: url("images/ai_rick.jpeg");
   background-size: cover;
   background-position: sticky;
-  backdrop-filter: brightness(2.3);
+  backdrop-filter: blur(2px) brightness(2.3);
   transform: scale(.99);
   z-index: 2;
   pointer-events: none;
 }
 
-.modal, .hidden { display: !important; }
+.modal, .hidden { display: none !important; }
+.show { display: block !important; }
 
