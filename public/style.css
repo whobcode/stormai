@@ -35,7 +35,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(255,72,72,0.4);
   background: var(--gradient-primary);
-  animation: bgShift 30s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  animation: bgShift 3s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
   padding: 4px;
 }
 @keyframes bgShift {
@@ -100,7 +100,7 @@ footer {
   display: none;
 }
 
-#menu-options.show { display: block; }
+#menu-options.show { display: flex; }
 
 #menu-options ul { padding: 0; margin: 0; list-style: none; }
 #menu-options li { margin-bottom: 0.5em; }
@@ -116,7 +116,7 @@ footer {
   background: rgba(34, 35, 43, 0.75);
   backdrop-filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864;
-  overflow-y: auto;
+  overflow-y: hidden;
   height: 60vh;
   margin-top: 4rem;
 }
@@ -196,10 +196,11 @@ button[type="submit"]:hover {
 }
 /* Auth Buttons (Sign Up & Login) */
 .auth-buttons a {
+  position: relative;
   display: inline-block;
   padding: 0.6rem 1rem;
   border-radius: 1rem;
-  background: var(--gradient-hover);
+  background: var(--gradient-primary);
   color: #fff;
   text-decoration: none;
   font-weight: 700;
@@ -214,9 +215,10 @@ button[type="submit"]:hover {
 }
 
 #send-button {
+  position: relative;
   padding: 0.6rem;
   border-radius: 1rem;
-  background: var(--gradient-hover);
+  background: var(--gradient-primary);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -226,7 +228,7 @@ button[type="submit"]:hover {
   display: none;
   align-items: center;
   font-size: 0.9rem;
-  color: var(--primary-accent);
+  color: var(--gradient-accent);
 }
 
 .typing-indicator.visible { display: flex; }
@@ -237,7 +239,7 @@ button[type="submit"]:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('images/ai_rick.jpeg');
+  background-image: url("images/ai_rick.jpeg");
   background-size: cover;
   background-position: center;
   opacity: 0.75; 
@@ -250,14 +252,14 @@ button[type="submit"]:hover {
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('images/ai_rick.jpeg');
+  background-image: url("images/ai_rick.jpeg");
   background-size: cover;
   background-position: sticky;
-  backdrop-filter: blur(2px) brightness(2.3);
+  backdrop-filter: brightness(2.3);
   transform: scale(.99);
   z-index: 2;
   pointer-events: none;
 }
 
-.modal, .hidden { display: flex; }
+.modal, .hidden { display: !important; }
 
