@@ -124,8 +124,14 @@ footer {
   overflow-y: hidden;
   height: 60vh;
   margin-top: 4rem;
+  animation: bgShift 3s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  padding: 4px;
 }
-
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 .chat-messages { padding: 1rem; z-index: 2; }
 
 .message { display: flex; margin-bottom: 1rem; }
@@ -249,7 +255,6 @@ button[type="submit"]:hover {
   background-position: center;
   opacity: 0.75; 
   pointer-events: none;
-  z-index: 0;
 }
 
 #full-bg {
@@ -262,7 +267,6 @@ button[type="submit"]:hover {
   background-position: sticky;
   backdrop-filter: blur(2px) brightness(2.3);
   transform: scale(.99);
-  z-index: 2;
   pointer-events: none;
 }
 
