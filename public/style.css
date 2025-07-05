@@ -132,9 +132,9 @@ footer {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-.chat-messages { padding: 1rem; z-index: 2; display: flex; flex-direction: column; overflow-y: auto; }
+.chat-messages { padding: 1rem; z-index: 2; display: block; flex-direction: column; overflow-y: auto; }
 
-.message { display: flex; margin-bottom: 1rem; }
+.message { display: block; margin-bottom: 1rem; }
 .user-message { flex-direction: row-reverse; }
 
 .avatar {
@@ -255,7 +255,21 @@ button[type="submit"]:hover {
   background-position: center;
   opacity: 0.45; 
   pointer-events: none;
+  animation: bgShift 3s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  padding: 4px;
+  backdrop-filter: blur(2.5px);
+  box-shadow: 0 0 44px 14px #ffb864;
+  overflow-y: auto;
+  height: 60vh;
+  margin-top: 4rem
+
 }
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 
 #full-bg {
   position: fixed;
