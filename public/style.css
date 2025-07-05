@@ -182,7 +182,7 @@ footer {
   background: var(--input-bg-dark);
   border-radius: 1rem;
   padding: 0.6rem;
-  color: #fafcff;
+  color: #ffff;
   border: none;
   outline: none;
 }
@@ -239,7 +239,7 @@ button[type="submit"]:hover {
   display: none;
   align-items: center;
   font-size: 0.9rem;
-  color: var(--gradient-accent);
+  color: #fff;
 }
 
 .typing-indicator.visible { display: flex; }
