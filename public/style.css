@@ -75,8 +75,8 @@ footer {
 }
 .typing-glow {
   box-shadow:
-    inset 0 0 12px 2px var(--gradient-accent),
-    0 0 8px var(--gradient-hover);
+    inset 0 0 12px 2px var(--primary-accent),
+    0 0 8px var(--primary-hover);
   transition: box-shadow .25s ease;
 }
 #menu-toggle {
