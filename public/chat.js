@@ -110,12 +110,12 @@ if (localStorage.getItem("chatHistory")) {
 let typingTimeout;
 userInput.addEventListener("focus", function () {
   // Always black text when engaged/focused (any theme)
-  this.style.color = "#151411";
+  this.style.color = "#ffff";
 });
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
-  this.style.color = "#fafcff";
+  this.style.color = "#ffff";
 });
 userInput.addEventListener("input", function () {
   this.style.height = "auto";
@@ -135,21 +135,6 @@ document.getElementById("input-form").addEventListener("submit", e => {
   sendMessage();
 });
 
-
-// Avatar upload logic
-if (avatarInput) {
-  avatarInput.addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        localStorage.setItem("userAvatar", evt.target.result);
-        window.location.reload();
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-}
 
 function setTypingIndicator(visible) {
   const indicator = document.getElementById("typing-indicator");
@@ -218,7 +203,6 @@ async function sendMessage() {
     }
     chatHistory.push({ role: "assistant", content: responseText, timestamp: Date.now() });
     saveHistory();
-    playSound();
     renderQuickReplies(responseText);
   } catch (error) {
     console.error("Error:", error);
@@ -329,7 +313,8 @@ function handleSlashCommand(cmd) {
 }
 function renderQuickReplies(aiText) {
   const lastUser = chatHistory.slice().reverse().find(m => m.role === "user");
-  if (!lastUser) return;
+  if (lastUser)
+	return;
   const sampleReplies = [
     "Can you elaborate?",
     "Show me an example.",

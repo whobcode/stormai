@@ -142,6 +142,7 @@ footer {
   height: 28px;
   border-radius: 50%;
   border: 2px solid var(--surface-light);
+  opacity: none;
 }
 
 .bubble {
@@ -153,7 +154,7 @@ footer {
   word-break: break-word;
 }
 
-.user-message .bubble { background: var(--user-msg-bg); color: #fff; }
+.user-message .bubble { background: var(--user-msg-bg); color: #fff; flex-direction: row-reverse; }
 
 .timestamp {
   font-size: 0.75rem;
@@ -245,7 +246,7 @@ button[type="submit"]:hover {
 .typing-indicator.visible { display: flex; }
 
 #bg-moon {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
