@@ -46,15 +46,6 @@ function closeSettings() {
   document.getElementById("settings-modal").classList.remove("show"); 
 };
 
-// Verbose typing indicator toggle
-const verboseToggle = document.getElementById("verbose-toggle");
-let isVerbose = localStorage.getItem("verboseTyping") !== "false";
-verboseToggle.checked = isVerbose;
-verboseToggle.onchange = function() {
-  isVerbose = verboseToggle.checked;
-  localStorage.setItem("verboseTyping", isVerbose ? "true" : "false");
-};
-
 // Model selector placeholder (save to localStorage for future use)
 document.getElementById("model-select").onchange = function(e){
   localStorage.setItem("selectedModel", e.target.value);
@@ -65,8 +56,6 @@ document.getElementById('export-settings-btn').onclick = function() {
   const data = {
     chatHistory: JSON.parse(localStorage.getItem('chatHistory') || '[]'),
     userAvatar: localStorage.getItem('userAvatar') || null,
-    theme: localStorage.getItem('theme') || null,
-    verboseTyping: localStorage.getItem('verboseTyping') || null,
     selectedModel: localStorage.getItem('selectedModel') || null
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
@@ -87,8 +76,6 @@ importFile.onchange = function(e){
       const data = JSON.parse(evt.target.result);
       if(data.chatHistory) localStorage.setItem('chatHistory', JSON.stringify(data.chatHistory));
       if(data.userAvatar) localStorage.setItem('userAvatar', data.userAvatar);
-      if(data.theme) localStorage.setItem('theme', data.theme);
-      if(data.verboseTyping) localStorage.setItem('verboseTyping', data.verboseTyping);
       if(data.selectedModel) localStorage.setItem('selectedModel', data.selectedModel);
       alert("Imported! Reloading…");
       window.location.reload();
