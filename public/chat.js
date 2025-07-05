@@ -6,7 +6,11 @@ const chatContainer = document.getElementById("chat-container");
 const signupModal = document.getElementById("signup-modal");
 const loginModal = document.getElementById("login-modal");
 const AVATAR_AI = "images/rick_head.jpg";
-
+const verboseToggle = document.getElementById("verbose-toggle");
+let isVerbose = verboseToggle?.checked ?? false;
+verboseToggle?.addEventListener("change", () => {
+	isVerbose = verboseToggle.checked;
+});
 // Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
