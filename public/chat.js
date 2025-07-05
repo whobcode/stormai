@@ -30,37 +30,8 @@ document.body.addEventListener("click", (e) => {
   }
 }, true);
 
-// Modal open/close
-document.getElementById("show-login").onclick = () => {
-  signupModal.classList.add("hidden");
-  loginModal.classList.remove("hidden");
-};
-document.getElementById("show-signup").onclick = () => {
-  loginModal.classList.add("hidden");
-  signupModal.classList.remove("hidden");
-};
-
-// Signup form handler
-document.getElementById("signup-form").onsubmit = async e => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target).entries());
-  try {
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error("Signup failed");
-    alert("Welcome, " + data.firstName + "! Your preferences are saved.");
-    signupModal.classList.add("hidden");
-  } catch (err) {
-    console.error("Signup error:", err);
-    alert("There was a problem signing up. Please try again.");
-  }
-};
 
 // Other menu actions
-document.getElementById("theme-switch").onclick = toggleTheme;
 document.getElementById("export-chat").onclick = () => exportChat("txt");
 document.getElementById("change-avatar").onclick = () => avatarInput.click();
 document.getElementById("info-btn").onclick = function() {
