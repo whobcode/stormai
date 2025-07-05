@@ -1,5 +1,4 @@
 /* Fully Cleaned style.css (Dark theme only, tailored for provided HTML) */
-
 :root {
   --primary-color: #ee4141;
   --primary-hover: #b81c1c;
@@ -16,7 +15,6 @@
   --gradient-hover: linear-gradient(135deg, #4143ff, #090403);
   --gradient-accent: linear-gradient(135deg, #9affec, #f9fac4);
 }
-
 body {
   font-family: 'Inter', sans-serif;
   background: var(--light-bg);
@@ -25,7 +23,6 @@ body {
   margin: 0 auto;
   padding: 1.5rem 1rem;
 }
-
 .site-logo {
   width: 52px;
   position: fixed;
@@ -43,7 +40,6 @@ body {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-
 .hero-overlay {
   position: fixed;
   top: 1rem;
@@ -54,7 +50,6 @@ body {
   z-index: 12;
   pointer-events: none;
 }
-
 footer {
   text-align: center;
   color: var(--text-light);
@@ -66,7 +61,6 @@ footer {
   padding: 0.2em;
   box-shadow: 0 1px 10px #0004;
 }
-
 #hamburger-menu {
   position: absolute;
   top: 1rem;
@@ -84,7 +78,6 @@ footer {
   border: none;
   cursor: pointer;
 }
-
 #menu-toggle span {
   width: 25px;
   height: 3px;
@@ -93,7 +86,6 @@ footer {
   margin-bottom: 4px;
   border-radius: 2px;
 }
-
 #menu-options {
   position: absolute;
   top: 40px;
@@ -104,9 +96,7 @@ footer {
   padding: 0.7rem;
   display: none;
 }
-
 #menu-options.show { display: flex; }
-
 #menu-options ul { padding: 0; margin: 0; list-style: none; }
 #menu-options li { margin-bottom: 0.5em; }
 #menu-options a {
@@ -114,11 +104,10 @@ footer {
   text-decoration: none;
   cursor: pointer;
 }
-
 .chat-container {
   position: sticky;
   border-radius: 18px;
-  background: rgba(34, 35, 43, 0.75);
+  background-image: url('images/ai_rick.jpeg');
   backdrop-filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864;
   overflow-y: auto;
@@ -133,10 +122,8 @@ footer {
   100% { background-position: 0% 50%; }
 }
 .chat-messages { padding: 1rem; z-index: 2; display: block; flex-direction: column; overflow-y: auto; }
-
 .message { display: block; margin-bottom: 1rem; }
 .user-message { flex-direction: row-reverse; }
-
 .avatar {
   width: 28px;
   height: 28px;
@@ -144,7 +131,6 @@ footer {
   border: 2px solid var(--surface-light);
   opacity: none;
 }
-
 .bubble {
   padding: 0.8rem;
   border-radius: 12px;
@@ -153,15 +139,12 @@ footer {
   max-width: 80%;
   word-break: break-word;
 }
-
 .user-message .bubble { background: var(--user-msg-bg); color: #fff; flex-direction: row-reverse; }
-
 .timestamp {
   font-size: 0.75rem;
   color: var(--text-light);
   text-align: right;
 }
-
 #bottom-bar {
   position: fixed;
   bottom: 0;
@@ -170,14 +153,12 @@ footer {
   backdrop-filter: blur(10px);
   padding: 0.6rem;
 }
-
 #input-form {
   display: flex;
   gap: 0.5em;
   align-items: center;
   justify-content: center;
 }
-
 #user-input {
   flex-grow: 1;
   background: var(--input-bg-dark);
@@ -201,7 +182,6 @@ button[type="submit"] {
   box-shadow: 0 10px 20px rgba(238,65,65,0.6);
   transition: transform 0.3s, box-shadow 0.3s;
 }
-
 button[type="submit"]:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 30px rgba(238,65,65,0.8);
@@ -220,12 +200,10 @@ button[type="submit"]:hover {
   transition: transform 0.3s, box-shadow 0.3s;
   margin-left: 0.5rem;
 }
-
 .auth-buttons a:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 30px rgba(238,65,65,0.8);
 }
-
 #send-button {
   position: relative;
   padding: 0.6rem;
@@ -235,16 +213,13 @@ button[type="submit"]:hover {
   border: none;
   cursor: pointer;
 }
-
 .typing-indicator {
   display: none;
   align-items: center;
   font-size: 0.9rem;
   color: #fff;
 }
-
 .typing-indicator.visible { display: flex; }
-
 #bg-moon {
   position: relative;
   top: 0;
@@ -263,15 +238,12 @@ button[type="submit"]:hover {
   overflow-y: auto;
   height: 60vh;
   margin-top: 4rem
-
 }
 @keyframes bgShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-
-
 #full-bg {
   position: fixed;
   inset: 0;
@@ -284,7 +256,5 @@ button[type="submit"]:hover {
   transform: scale(1.9);
   pointer-events: none;
 }
-
 .modal, .hidden { display: none !important; }
 .show { display: block !important; }
-
