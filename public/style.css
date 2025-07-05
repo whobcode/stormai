@@ -121,7 +121,7 @@ footer {
   background: rgba(34, 35, 43, 0.75);
   backdrop-filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864;
-  overflow-y: hidden;
+  overflow-y: auto;
   height: 60vh;
   margin-top: 4rem;
   animation: bgShift 3s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
@@ -132,7 +132,7 @@ footer {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-.chat-messages { padding: 1rem; z-index: 2; }
+.chat-messages { padding: 1rem; z-index: 2; display: flex; flex-direction: column; overflow-y: auto; }
 
 .message { display: flex; margin-bottom: 1rem; }
 .user-message { flex-direction: row-reverse; }
@@ -186,7 +186,7 @@ footer {
   border: none;
   outline: none;
 }
-
+#user-input::placeholder {color: #fff;}
 button[type="submit"] {
   width: 23%;
   padding: 0.6rem;
@@ -253,7 +253,7 @@ button[type="submit"]:hover {
   background-image: url("images/ai_rick.jpeg");
   background-size: cover;
   background-position: center;
-  opacity: 0.75; 
+  opacity: 0.45; 
   pointer-events: none;
 }
 
@@ -265,8 +265,8 @@ button[type="submit"]:hover {
   background-image: url("images/ai_rick.jpeg");
   background-size: cover;
   background-position: sticky;
-  backdrop-filter: blur(2px) brightness(2.3);
-  transform: scale(.99);
+  backdrop-filter: blur(2.5px) brightness(-2.3);
+  transform: scale(1.9);
   pointer-events: none;
 }
 
