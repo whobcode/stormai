@@ -105,23 +105,29 @@ footer {
   cursor: pointer;
 }
 .chat-container {
-  position: sticky;
+  position: flex;
   border-radius: 18px;
   background-image: url('images/ai_rick.jpeg');
   backdrop-filter: blur(2.5px);
   box-shadow: 0 0 44px 14px #ffb864;
-  overflow-y: auto;
+  overflow: hidden;
   height: 60vh;
   margin-top: 4rem;
   animation: bgShift 3s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
   padding: 4px;
+  inset: 0;
 }
 @keyframes bgShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-.chat-messages { padding: 1rem; z-index: 2; display: block; flex-direction: column; overflow-y: auto; }
+.chat-messages { scroll-behavior: smooth; padding: 1rem 0.75rem 1rem 1rem; z-index: 2; display: flex; flex-direction: column; overflow-y: auto; gap: 1rem; max-height: 100%; }
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
 .message { display: block; margin-bottom: 1rem; }
 .user-message { flex-direction: row-reverse; }
 .avatar {
@@ -129,7 +135,6 @@ footer {
   height: 28px;
   border-radius: 50%;
   border: 2px solid var(--surface-light);
-  opacity: none;
 }
 .bubble {
   padding: 0.8rem;
@@ -220,36 +225,13 @@ button[type="submit"]:hover {
   color: #fff;
 }
 .typing-indicator.visible { display: flex; }
-#bg-moon {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("images/ai_rick.jpeg");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.45; 
-  pointer-events: none;
-  animation: bgShift 3s infinite alternate cubic-bezier(0.46, 0.03, 0.52, 0.96);
-  padding: 4px;
-  backdrop-filter: blur(2.5px);
-  box-shadow: 0 0 44px 14px #ffb864;
-  overflow-y: auto;
-  height: 60vh;
-  margin-top: 4rem
-}
-@keyframes bgShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+
 #full-bg {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url("images/ai_rick.jpeg");
+  background: var(--surface-bg);
   background-size: cover;
   background-position: sticky;
   backdrop-filter: blur(2.5px) brightness(-2.3);
