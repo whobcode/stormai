@@ -19,12 +19,12 @@
     "binding": "AI"
   },
   "upload_source_maps": true,  
-  "kv_namespaces": [
+  "d1_databases": [
     {
-      "binding": "user_creds",
-      "id": "d30d74c06c724326a4318827c2d18eee"
+      "binding": "DB",
+      "database_name": "hwmnb-signups",
+      "database_id": "49f0b993-88de-4e19-8bb9-400eb9919070"
     }
   ]
 }
-
 
