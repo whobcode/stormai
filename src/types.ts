@@ -6,7 +6,8 @@ export interface Env {
   /**
    * Binding for the Workers AI API.
    */
-  AI: Ai;
+  AI: any;
+  DB: D1Database;
 
   /**
    * Binding for static assets.
