@@ -42,7 +42,6 @@ document.body.addEventListener("click", (e) => {
   }
 }, true);
 document.getElementById("export-chat").onclick = () => exportChat("txt");
-document.getElementById("change-avatar").onclick = () => avatarInput.click();
 document.getElementById("info-btn").onclick = function() {
   document.getElementById("info-modal").classList.remove("hidden");
 };
