@@ -490,7 +490,7 @@ footer {
   pointer-events: none;
 }
 .modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,15,20,0.9); display: flex; align-items: center; justify-content: center; z-index: 3000; }
-.modal.hidden { display:none !important; }
+.modal, .hidden { display:none !important; }
 .modal-content {
   background: var(--surface-bg);
   color: var(--text-color);

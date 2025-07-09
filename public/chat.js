@@ -11,39 +11,57 @@ const menuOptions = document.getElementById("menu-options");
 menuToggle.addEventListener("click", () => {
   menuOptions.classList.toggle("show");
 });
-document.getElementById("show-login").onclick = () => {
+function showLogin() {
   signupModal.classList.add("hidden");
-  loginModal.classList.remove("hidden");
+  signupModal.classList.remove("show");
+  loginModal.classList.add("show");
+  loginModal.classList.remove("hidden"); 
 };
-document.getElementById("show-signup").onclick = () => {
+document.getElementById("show-login").onclick = showLogin;
+function showSignup() {
   loginModal.classList.add("hidden");
-  signupModal.classList.remove("hidden");
+  loginModal.classList.remove("show");
+  signupModal.classList.add("show");
+  signupModal.classList.remove("hidden"); 
 };
-document.getElementById("signup-form").onsubmit = async e => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target).entries());
-  try {
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error("Signup failed");
-    alert("Welcome, " + data.firstName + "! Your preferences are saved.");
-    signupModal.classList.add("hidden");
-  } catch (err) {
-    console.error("Signup error:", err);
-    alert("There was a problem signing up. Please try again.");
-  }
-};
+document.getElementById("show-signup").onclick = showSignup;
+document
+  .getElementById("signup-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries());
+
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        // Attempt to read error payload from Worker
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error || `Bad status ${res.status}`);
+      }
+
+      alert(`Welcome, ${data.firstName}! Your preferences are saved.`);
+      signupModal.classList.add("hidden");
+      signupModal.classList.remove("show");
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("There was a problem signing up. Please try again.");
+    } 
+});
 document.body.addEventListener("click", (e) => {
   if (!menuToggle.contains(e.target) && !menuOptions.contains(e.target)) {
     menuOptions.classList.remove("show");
+    menuOptions.classList.add("hidden");
   }
 }, true);
 document.getElementById("export-chat").onclick = () => exportChat("txt");
 document.getElementById("info-btn").onclick = function() {
   document.getElementById("info-modal").classList.remove("hidden");
+  document.getElementById("info-modal").classList.add("show");
 };
 function closeInfo(){ 
   document.getElementById("info-modal").classList.add("hidden"); 
