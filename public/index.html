@@ -8,11 +8,20 @@
   <link rel="stylesheet" href="style.css">
   <!-- Site Logo -->
   <img src="images/logo.png" class="site-logo" alt="Logo">
+</head>
+<body>
   <!-- Hero Overlay -->
   <h1 class="hero-overlay">|hWMNb.a.i.hWMNb|</h1>
-</head> 
-<body>
   <div id="full-bg"></div>
+  <!-- Main Chat UI -->
+  <div class="chat-container" id="chat-container">
+    <div id="chat-background"></div>
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="typing-indicator" id="typing-indicator">
+      <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
+        <span id="typing-text"></span>
+    </div>
+  </div>
   <!-- Hamburger Menu -->
   <div id="hamburger-menu">
     <button id="menu-toggle" aria-label="Menu">
@@ -20,80 +29,161 @@
     </button>
     <nav id="menu-options" class="hidden">
       <ul>
-        <li><a href="#" id="history-btn">📜 Chat History</a></li>
-        <li><a href="#" id="export-chat">💾 Export Chat</a></li>
-        <li><a href="#" id="settings-btn">⚙️ Settings</a></li>
-        <li><a href="#" id="info-btn">ℹ️ Info</a></li>
-        <li><a href="https://hwmnbai.cloudflareaccess.com/" class="login-btn">🔒 Login</a></li>
-      </ul>
+        <li>
+          <a href="#" id="history-btn">
+            <span class="menu-icon" aria-hidden="true">
+              <!-- History Icon SVG -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </span>Chat History</a></li>
+        <li>
+          <a href="#" id="change-avatar">
+            <span class="menu-icon" aria-hidden="true">
+              <!-- Avatar Icon SVG -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M20 20c0-3.3-2.7-6-6-6s-6 2.7-6 6"/>
+              </svg>
+            </span>Change Avatar</a></li>
+        <li>
+          <a href="#" id="export-chat">
+            <span class="menu-icon" aria-hidden="true">
+              <!-- Export Icon SVG -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+              </svg>
+            </span>Export Chat</a></li>
+        <li>
+	  <a href="#" id="settings-btn">
+            <span class="menu-icon" aria-hidden="true">
+              <!-- Settings Icon SVG -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15A1.65 1.65 0 0 0 21 12.79V11.21A1.65 1.65 0 0 0 19.4 9l-1.09-1.88a1.65 1.65 0 0 0-2.32-.6L15 4.6a1.65 1.65 0 0 0-3 0l-1.09 1.88a1.65 1.65 0 0 0-2.32.6L4.6 9A1.65 1.65 0 0 0 3 11.21v1.58A1.65 1.65 0 0 0 4.6 15l1.09 1.88a1.65 1.65 0 0 0 2.32.6l1.09-1.88a1.65 1.65 0 0 0 3 0l1.09 1.88a1.65 1.65 0 0 0 2.32-.6z"/>
+              </svg>
+	    </span>Settings</a></li>
+        <li>
+          <a href="#" id="info-btn">
+            <span class="menu-icon" aria-hidden="true">
+              <!-- Info Icon SVG -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12" y2="8"/>
+              </svg>
+            </span>Info </a></li>
+        <li>
+          <a href="https://hwmnbai.cloudflareaccess.com/cdn-cgi/access/login" class="login-btn">
+            <span class="menu-icon" aria-hidden="true">
+              <!-- Login Icon SVG -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="11" height="2"/>
+                <polyline points="12 8 15 12 12 16"/>
+                <rect x="17" y="5" width="4" height="14" rx="2"/>
+              </svg>
+            </span>Login</a></li></ul>
     </nav>
-  </div>
-  <div class="auth-buttons">
+  </div> 
+  <div class="auth-buttons" id="signup">
     <a href="signup.html">Sign Up</a>
+  </div>  
+  <div class="auth-buttons" id="login">
     <a href="https://hwmnbai.cloudflareaccess.com/">Login</a>
   </div>
-  <!-- Main Chat UI -->
-  <div class="chat-container" id="bg-moon">
-    <div id="chat-messages" class="chat-messages">
-      <div class="typing-indicator" id="typing-indicator">
-       <span id="lightbulb">💡</span>
-       <span id="typing-text"></span>
-      </div>
-    </div>  
+  <!-- Chat History Modal -->
+  <div id="history-modal" class="hidden">
+    <div class="history-modal-content">
+      <h3>Chat History</h3>
+      <input type="search" id="history-search" placeholder="Search chat..." style="width:97%;padding:0.3em;margin-bottom:0.7em;border-radius:0.7em;border:1px solid #ddd;">
+      <ul id="history-list"></ul>
+      <button onclick="closeHistory()" style="margin-top:1rem;">Close</button>
+    </div>
   </div>
-  <footer>
-    <div id="bottom-bar">
-      <form id="input-form" enctype="multipart/form-data" autocomplete="off">
-        <label for="file-upload" id="upload-label">📎</label>
-        <input type="file" id="file-upload" style="display:none;" multiple>
-        <textarea id="user-input" placeholder="Type your message here..." rows="1"></textarea>
-        <button id="send-button" type="submit">Send</button>
-      </form>
-    </div>
-    <div class="footer-credits">
-      <span>Powered by <b>a few mad scientists</b></span>
-      <span>theWannaBeeesz &copy; 2025</span>
-    </div>
-  </footer>
-
   <!-- Info Modal -->
   <div id="info-modal" class="hidden">
     <div class="modal-content">
       <h3>Info</h3>
       <b>Slash Commands:</b>
-      <ul>
-        <li><code>/clear</code> – clear conversation</li>
-        <li><code>/export</code> – download chat</li>
-        <li><code>/export md</code> – markdown export</li>
-        <li><code>/help</code> – commands list</li>
+      <ul style="font-size:0.96em;margin-bottom:0.6em;">
+        <li><code>/clear</code> – clear the conversation</li>
+        <li><code>/export</code> – download as text</li>
+        <li><code>/export md</code> – download as markdown</li>
+        <li><code>/help</code> – list commands</li>
       </ul>
       <h4>API Endpoints</h4>
       <ul>
-        <li><code>/api/chat</code>: POST — chat endpoint</li>
+        <li><code>/api/chat</code>: POST — LLM chat API (requires login if protected)</li>
       </ul>
-      <button onclick="closeInfo()">Close</button>
+      <button onclick="closeInfo()" style="margin-top:1rem;">Close</button>
     </div>
   </div>
-
+  <!--  Sign up & Survey  -->
+  <div id="signup-modal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Sign Up</h3>
+    <form id="signup-form">
+      <input type="text" name="firstName" placeholder="First Name" required>
+      <input type="text" name="lastName" placeholder="Last Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="phone" placeholder="Phone" required>
+      <textarea name="aiPurpose" placeholder="What do you want from your AI?" required></textarea>
+      <hr>
+      <h4>Personalization</h4>
+      <input type="date" name="dob" placeholder="Date of Birth" required>
+      <input type="text" name="favoriteColor" placeholder="Favorite Color" required>
+      <input type="text" name="favoriteAnimal" placeholder="Favorite Animal">
+      <textarea name="stylePrefs" placeholder="Describe your aesthetic or visual style preferences..."></textarea>
+      <button type="submit">Create Account</button>
+    </form>
+    <p style="text-align:center;margin-top:1em;">Already have an account? <button id="show-login" class="login-btn">Login</button></p>
+  </div>
+  </div> 
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Login with Cloudflare Access</h3>
+      <p style="text-align:center;">Please <a href="/cdn-cgi/access/login" class="login-btn">login with your Cloudflare Access account</a>.</p>
+      <p style="text-align:center;margin-top:1em;">Don't have an account? <button id="show-signup" class="login-btn">Sign Up</button></p>
+    </div>
+  </div>
   <!-- Settings Modal -->
   <div id="settings-modal" class="hidden">
     <div class="modal-content">
       <h3>Settings</h3>
-      <label style="display:flex;align-items:center;gap:.5em;margin:.6rem 0;">
-      	<input id="verbose-toggle" type="checkbox">	
-      	<span>Verbose typing indicator</span>
-      </label>
-
-      <button id="export-settings-btn">Export Data</button>
-      <button id="export-settings-btn">Export Data</button>
-      <button id="import-settings-btn">Import Data</button>
-      <button id="clear-settings-btn">Clear Data</button>
-      <input id="import-settings-file" type="file" accept="application/json" hidden>
-      <button onclick="closeSettings()">Close</button>
+      <div>
+        <label><input type="checkbox" id="verbose-toggle" checked> Verbose typing indicator</label>
+      </div>
+      <div style="margin-top:0.9em">
+        <b>Model Selection</b> (OpenRouter.ai):<br>
+        <select id="model-select">
+          <option value="default">Default (coming soon)</option>
+        </select>
+      </div>
+      <div style="margin-top:1.2em;">
+        <button id="export-settings-btn">Export All Data</button>
+        <button id="import-settings-btn">Import Data</button>
+        <button id="clear-settings-btn" style="color:#c00;margin-left:1em;">Clear All Data</button>
+      </div>
+      <input id="import-settings-file" type="file" accept="application/json" style="display:none;">
+      <button onclick="closeSettings()" style="margin-top:1rem;">Close</button>
     </div>
-  </div>
-
+  </div>  
+  <footer>
+    <div id="bottom-bar">
+      <form id="input-form" enctype="multipart/form-data" autocomplete="off">
+        <label for="file-upload" id="upload-label">📎</label>
+        <input type="file" id="file-upload" style="display:none;" multiple>
+        <textarea id="user-input" placeholder="Type your message here..." rows="3"></textarea>
+        <button id="send-button" type="submit">Send</button>
+      </form>
+    </div>
+    <div class="footer-credits">
+      <span>Powered by <b>a few mad scientists</b></span>
+      <span style="font-size:0.75rem;">theWannaBeeesz &copy; 2025</span>
+    </div>
+  </footer>
   <script src="chat.js"></script>
 </body>
 </html>
-

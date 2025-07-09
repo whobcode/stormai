@@ -5,38 +5,44 @@ const avatarInput = document.getElementById("avatar-upload");
 const chatContainer = document.getElementById("chat-container");
 const signupModal = document.getElementById("signup-modal");
 const loginModal = document.getElementById("login-modal");
-const AVATAR_AI = "images/rick_head.jpg";
-const verboseToggle = document.getElementById("verbose-toggle");
-let isVerbose = verboseToggle?.checked ?? false;
-verboseToggle?.addEventListener("change", () => {
-	isVerbose = verboseToggle.checked;
-});
 // Hamburger/menu logic
 const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
-let anonRequestCount = 0;
-const authenticated = document.cookie.includes("CF_Authorization");
-
-// Hamburger open/close robustly toggles hidden/show
 menuToggle.addEventListener("click", () => {
-  if (menuOptions.classList.contains("show")) {
-    menuOptions.classList.remove("show");
-    menuOptions.classList.add("hidden");
-  } else {
-    menuOptions.classList.add("show");
-    menuOptions.classList.remove("hidden");
-  }
+  menuOptions.classList.toggle("show");
 });
+document.getElementById("show-login").onclick = () => {
+  signupModal.classList.add("hidden");
+  loginModal.classList.remove("hidden");
+};
+document.getElementById("show-signup").onclick = () => {
+  loginModal.classList.add("hidden");
+  signupModal.classList.remove("hidden");
+};
+document.getElementById("signup-form").onsubmit = async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  try {
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Signup failed");
+    alert("Welcome, " + data.firstName + "! Your preferences are saved.");
+    signupModal.classList.add("hidden");
+  } catch (err) {
+    console.error("Signup error:", err);
+    alert("There was a problem signing up. Please try again.");
+  }
+};
 document.body.addEventListener("click", (e) => {
   if (!menuToggle.contains(e.target) && !menuOptions.contains(e.target)) {
     menuOptions.classList.remove("show");
-    menuOptions.classList.add("hidden");
   }
 }, true);
-
-
-// Other menu actions
 document.getElementById("export-chat").onclick = () => exportChat("txt");
+document.getElementById("change-avatar").onclick = () => avatarInput.click();
 document.getElementById("info-btn").onclick = function() {
   document.getElementById("info-modal").classList.remove("hidden");
 };
@@ -50,11 +56,26 @@ function closeSettings() {
   document.getElementById("settings-modal").classList.remove("show"); 
 };
 
+// Verbose typing indicator toggle
+const verboseToggle = document.getElementById("verbose-toggle");
+let isVerbose = localStorage.getItem("verboseTyping") !== "false";
+verboseToggle.checked = isVerbose;
+verboseToggle.onchange = function() {
+  isVerbose = verboseToggle.checked;
+  localStorage.setItem("verboseTyping", isVerbose ? "true" : "false");
+};
+
+// Model selector placeholder (save to localStorage for future use)
+document.getElementById("model-select").onchange = function(e){
+  localStorage.setItem("selectedModel", e.target.value);
+};
 // Export/import/clear data logic
 document.getElementById('export-settings-btn').onclick = function() {
   const data = {
     chatHistory: JSON.parse(localStorage.getItem('chatHistory') || '[]'),
     userAvatar: localStorage.getItem('userAvatar') || null,
+    theme: localStorage.getItem('theme') || null,
+    verboseTyping: localStorage.getItem('verboseTyping') || null,
     selectedModel: localStorage.getItem('selectedModel') || null
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
@@ -74,6 +95,9 @@ importFile.onchange = function(e){
     try {
       const data = JSON.parse(evt.target.result);
       if(data.chatHistory) localStorage.setItem('chatHistory', JSON.stringify(data.chatHistory));
+      if(data.userAvatar) localStorage.setItem('userAvatar', data.userAvatar);
+      if(data.verboseTyping) localStorage.setItem('verboseTyping', data.verboseTyping);
+      if(data.selectedModel) localStorage.setItem('selectedModel', data.selectedModel);
       alert("Imported! Reloading…");
       window.location.reload();
     } catch(e){ alert("Import failed!"); }
@@ -87,10 +111,13 @@ document.getElementById('clear-settings-btn').onclick = function(){
   }
 };
 
-// Use a persistent avatar, fallback to GitHub octocat
-const AVATAR_USER = localStorage.getItem("userAvatar") || "https://avatars.githubusercontent.com/u/583231?v=4";
+const AVATAR_USER = "images/logo.png" || "https://avatars.githubusercontent.com/u/583231?v=4";
+const AVATAR_AI = "images/rick_head.jpg";
+const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
+
 let chatHistory = [];
 let isProcessing = false;
+
 // Persistent chat
 if (localStorage.getItem("chatHistory")) {
   chatHistory = JSON.parse(localStorage.getItem("chatHistory"));
@@ -110,35 +137,46 @@ if (localStorage.getItem("chatHistory")) {
 let typingTimeout;
 userInput.addEventListener("focus", function () {
   // Always black text when engaged/focused (any theme)
-  this.style.color = "#ffff";
+  this.style.color = "#151411";
 });
+
 userInput.addEventListener("blur", function () {
   this.classList.remove("typing-glow");
   chatContainer.classList.remove("typing");
-  this.style.color = "#ffff";
+  this.style.color = "#fafcff";
 });
+
 userInput.addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = this.scrollHeight + "px";
   this.classList.add("typing-glow");
   chatContainer.classList.add("typing");
+  // No need to set color here! Focus handles it.
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(() => {
     this.classList.remove("typing-glow");
     chatContainer.classList.remove("typing");
+    // No color changes here either!
   }, 1400);
 });
-
-// Handle form submit and send button click
-document.getElementById("input-form").addEventListener("submit", e => {
-  e.preventDefault(); // prevent page reload
-  sendMessage();
-});
-
-
+sendButton.addEventListener("click", sendMessage);
+if (avatarInput) {
+  avatarInput.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        localStorage.setItem("userAvatar", evt.target.result);
+        window.location.reload();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
 function setTypingIndicator(visible) {
   const indicator = document.getElementById("typing-indicator");
   const text = document.getElementById("typing-text");
+  isVerbose = localStorage.getItem("verboseTyping") !== "false";
   if (visible) {
     indicator.classList.add("visible");
     text.innerHTML = isVerbose
@@ -152,13 +190,6 @@ function setTypingIndicator(visible) {
 async function sendMessage() {
   const message = userInput.value.trim();
   if (message === "" || isProcessing) return;
-  if (!authenticated) {
-    anonRequestCount++;
-    if (anonRequestCount >= 5) {
-      signupModal.classList.remove("hidden");
-      return;
-    }
-  }
   if (message.startsWith("/")) {
     handleSlashCommand(message);
     userInput.value = "";
@@ -202,7 +233,8 @@ async function sendMessage() {
       }
     }
     chatHistory.push({ role: "assistant", content: responseText, timestamp: Date.now() });
-    saveHistory();
+    saveHistory()
+    playSound();
     renderQuickReplies(responseText);
   } catch (error) {
     console.error("Error:", error);
@@ -223,6 +255,7 @@ function addMessageToChat(role, content) {
   saveHistory();
   scrollChatToBottom();
 }
+
 
 function renderMessage(role, content, timestamp) {
   const avatar = role === "user" ? AVATAR_USER : null;
@@ -313,8 +346,7 @@ function handleSlashCommand(cmd) {
 }
 function renderQuickReplies(aiText) {
   const lastUser = chatHistory.slice().reverse().find(m => m.role === "user");
-  if (lastUser)
-	return;
+  if (!lastUser) return;
   const sampleReplies = [
     "Can you elaborate?",
     "Show me an example.",
@@ -394,4 +426,3 @@ function showHistory() {
   renderFilteredHistory();
   modal.classList.add("show");
 }
-
