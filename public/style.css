@@ -76,7 +76,7 @@ body{
 #chat-background {
   position: fixed;
   inset: 0;
-  background: url("images/logo.png") center/cover no-repeat;
+  background: url("images/logo.png") center/contain no-repeat;
   z-index: 1;
   filter: blur(3px) brightness(0.85);
   transition: box-shadow 0.22s;
@@ -96,7 +96,7 @@ body{
   height: 100%;
   width: 100%;
   border-radius: 18px;
-  background-image: url("images/logo.png") center/cover;
+  background-image: url("images/logo.png") center;
   background-repeat: no-repeat;
   background-position: fixed;
   background-size: contain;
@@ -524,4 +524,4 @@ footer {
   cursor: pointer;
 }
 .modal-content button:hover { background: var(--primary-hover); }
-.show { display: block !important; }
+.show { display: flex !important; }
