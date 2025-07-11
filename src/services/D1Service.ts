@@ -49,3 +49,4 @@ export class D1Service {
 
   // TODO: ✨ add more helpers as needed (updateUser, listUsers, etc.)
 }
+
