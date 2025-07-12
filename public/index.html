@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en"><br><div class="auth-buttons" id="signup"><a href="#">Sign Up</a></div>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,20 +14,12 @@
   <h1 class="hero-overlay">|hWMNb.a.i.hWMNb|</h1>
   <div id="full-bg"></div>
   <!-- Main Chat UI -->
-  <div class="chat-container" id="chat-container">
-    <div id="chat-background"></div>
-    <div id="chat-messages" class="chat-messages"></div>
-    <div class="typing-indicator" id="typing-indicator">
-      <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
-        <span id="typing-text"></span>
-    </div>
-  </div>
   <!-- Hamburger Menu -->
   <div id="hamburger-menu">
     <button id="menu-toggle" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
-    <nav id="menu-options" class="hidden">
+    <nav id="menu-options">
       <ul>
         <li>
           <a href="#" id="history-btn">
@@ -92,8 +84,16 @@
   <div class="auth-buttons" id="login">
     <a href="https://hwmnbai.cloudflareaccess.com/">Login</a>
   </div>
+  <div class="chat-container" id="chat-container">
+    <div id="chat-background" class="chat-container"></div>
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="typing-indicator" id="typing-indicator">
+      <span id="lightbulb" style="font-size:1.4em;vertical-align:middle;">💡</span>
+      <span id="typing-text"></span>
+    </div>
+  </div>
   <!-- Chat History Modal -->
-  <div id="history-modal" class="hidden">
+  <div id="history-modal" class="modal hidden">
     <div class="history-modal-content">
       <h3>Chat History</h3>
       <input type="search" id="history-search" placeholder="Search chat..." style="width:97%;padding:0.3em;margin-bottom:0.7em;border-radius:0.7em;border:1px solid #ddd;">
@@ -102,7 +102,7 @@
     </div>
   </div>
   <!-- Info Modal -->
-  <div id="info-modal" class="hidden">
+  <div id="info-modal" class="modal hidden">
     <div class="modal-content">
       <h3>Info</h3>
       <b>Slash Commands:</b>
@@ -120,7 +120,7 @@
     </div>
   </div>
   <!--  Sign up & Survey  -->
-  <div id="signup-modal" class="modal","hidden">
+  <div id="signup-modal" class="modal hidden">
   <div class="modal-content">
     <h3>Sign Up</h3>
     <form id="signup-form">
@@ -141,7 +141,7 @@
   </div>
   </div> 
   <!-- Login Modal -->
-  <div id="login-modal" class="modal"," hidden">
+  <div id="login-modal" class="modal hidden">
     <div class="modal-content">
       <h3>Login with Cloudflare Access</h3>
       <p style="text-align:center;">Please <a href="https://hwmnbai.tru-bone.workers.dev" class="login-btn">login with your Cloudflare Access account</a>.</p>
@@ -149,7 +149,7 @@
     </div>
   </div>
   <!-- Settings Modal -->
-  <div id="settings-modal" class="hidden">
+  <div id="settings-modal" class="modal hidden">
     <div class="modal-content">
       <h3>Settings</h3>
       <div>

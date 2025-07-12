@@ -76,7 +76,7 @@ body{
 #chat-background {
   position: fixed;
   inset: 0;
-  background: url("images/logo.png") center/contain no-repeat;
+  background: url("images/logo.png") cover no-repeat;
   z-index: 1;
   filter: blur(3px) brightness(0.85);
   transition: box-shadow 0.22s;
@@ -88,19 +88,15 @@ body{
   to { opacity: 1; transform: translateY(0); } 
 }
 .chat-container {
-  position: sticky; 
-  will-change: transform;
+  position: fixed center; 
+  margin: auto;
   content-visibility: visible;
-  top: 0;
-  left 0;
-  height: 100%;
-  width: 100%;
+  height: 250px;
+  width: 350px;
   border-radius: 18px;
-  background-image: url("images/logo.png") center;
+  background-image: url("images/logo.png") cover;
   background-repeat: no-repeat;
-  background-position: fixed;
-  background-size: contain;
-  backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(0.5px);
   box-shadow: 0 0 44px 14px #ffb864, 0 2px 38px 0 #000b;
   overflow-y: auto;
   transition: box-shadow 0.22s;
@@ -113,10 +109,10 @@ body{
   stroke: #fff7a1;
 }
 #chat-container::before {
-  content: "";
+  content: url("images/logo3.png");
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+  background: linear-gradient(to bottom, var(--gradient-accent), var(--gradient-primary));
   z-index: 0;
 }
 .chat-messages {

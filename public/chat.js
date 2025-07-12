@@ -10,6 +10,7 @@ const menuToggle = document.getElementById("menu-toggle");
 const menuOptions = document.getElementById("menu-options");
 menuToggle.addEventListener("click", () => {
   menuOptions.classList.toggle("show");
+  menuOptions.classList.toggle("hidden");
 });
 function showLogin() {
   signupModal.classList.add("hidden");
@@ -58,6 +59,10 @@ document.body.addEventListener("click", (e) => {
     menuOptions.classList.add("hidden");
   }
 }, true);
+document.getElementById("sigunup-btn").addEventListener("click", (e) => {
+  e.preventDefault();
+  showSignup();
+});
 document.getElementById("export-chat").onclick = () => exportChat("txt");
 document.getElementById("info-btn").onclick = function() {
   document.getElementById("info-modal").classList.remove("hidden");
@@ -130,8 +135,7 @@ document.getElementById('clear-settings-btn').onclick = function(){
 
 const AVATAR_USER = "images/logo.png" || "https://avatars.githubusercontent.com/u/583231?v=4";
 const AVATAR_AI = "images/rick_head.jpg";
-const SOUND_URL = "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c5d.mp3";
-
+const SOUND_URL = 
 let chatHistory = [];
 let isProcessing = false;
 
@@ -304,7 +308,7 @@ async function streamToMessage(el, text) {
 }
 function renderMarkdown(md) {
   let html = md
-    .replace(/\`([^\`]+)`/g, '<code>$1</code>')
+    .replace(/\`([^\`]+)\\`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\*([^*]+)\*/g, '<i>$1</i>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');

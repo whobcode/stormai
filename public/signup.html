@@ -50,8 +50,25 @@
     <span>Powered by <b>a few mad scientists</b></span>
     <span>theWannaBeeesz &copy; 2025</span>
   </footer>
+  <script type="module">
+    import { createAccount } from "signupClient.js";
 
-  <script>
+    const form = document.getElementById("signup-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        await createAccount(data);
+        alert(`Welcome, ${data.firstName}! Your preferences were saved.`);
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        alert(err.message || "Signup failed");
+      }
+    });
+  </script> 
+  <!--script>
     document.getElementById("signup-form").onsubmit = async function(e) {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(e.target).entries());
@@ -71,7 +88,7 @@
         msg.style.color = "#dc3545";
       }
     }
-  </script>
+  </script-->
 </body>
 </html>
 
