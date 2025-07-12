@@ -1,18 +1,20 @@
 /**
  * Type definitions for the LLM chat application.
  */
-
+import type { D1Database, Ai, Fetcher } from "@cloudflare/workers-types";
 export interface Env {
   /**
    * Binding for the Workers AI API.
    */
-  AI: any;
+  AI: Ai;
   DB: D1Database;
-
+  ASSETS: Fetcher;
   /**
    * Binding for static assets.
    */
-  ASSETS: { fetch: (request: Request) => Promise<Response> };
+  /**ASSETS: { fetch: (request: Request) => Promise<Response> };
+   *
+   */
 }
 
 /**
